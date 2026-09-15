@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Liste des posts{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<h2>Liste des posts</h2>
+
+<ul>
+  {% for post in posts %}
+  <li><a href="{% url 'post' id=post.id %}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
