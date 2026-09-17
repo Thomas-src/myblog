@@ -1,18 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
-
-class User(models.Model):
-  name = models.CharField(max_length=50, verbose_name="nom")
-  password = models.CharField(max_length=200, verbose_name="mdp")
-  email = models.CharField(max_length=50, verbose_name="email")
-  is_admin = models.BooleanField(verbose_name="admin")
-
-
-  class Meta:
-    ordering = ('name','email','password','is_admin', )
-    verbose_name = "utilisateur"
-    verbose_name_plural = "utilisateurs"
 
 class Category(models.Model):
   name = models.CharField(max_length=50, verbose_name="Nom")
@@ -32,7 +21,7 @@ class Post(models.Model):
   imageUrl = models.CharField(max_length=100, verbose_name="lien image")
   createAt = models.DateTimeField(verbose_name="date de création", auto_now_add=True)
   creator = models.ForeignKey(User, verbose_name="Utilisateur", related_name='posts', on_delete=models.CASCADE)
-  categories = models.ManyToManyField('Category', verbose_name="Catégorie", related_name='products')
+  categories = models.ManyToManyField('Category', verbose_name="Catégorie", related_name='categories')
 
   class Meta:
     ordering = ('title','description','imageUrl','creator','createAt', )

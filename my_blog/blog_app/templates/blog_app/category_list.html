@@ -9,6 +9,8 @@
 <ul>
   {% for category in categorys %}
   <li><a href="{% url 'category' id=category.id %}">{{ category.name }}</a></li>
+  {% empty %}
+  <li>Aucun résultat</li>
   {% endfor %}
 </ul>
 

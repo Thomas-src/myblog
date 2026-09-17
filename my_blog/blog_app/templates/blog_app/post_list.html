@@ -9,6 +9,8 @@
 <ul>
   {% for post in posts %}
   <li><a href="{% url 'post' id=post.id %}">{{ post.title }}</a></li>
+  {% empty %}
+  <li>Aucun résultat</li>
   {% endfor %}
 </ul>
 
