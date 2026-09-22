@@ -1,17 +1,92 @@
 {% extends 'base.html' %}
-{% block title %}Liste des posts{% endblock %}
-
-{% block content %}
 {% load static %}
 
-<h2>Liste des posts</h2>
+{% block title %}Liste des posts — MyBlog{% endblock %}
 
-<ul>
-  {% for post in posts %}
-  <li><a href="{% url 'post' id=post.id %}">{{ post.title }}</a></li>
-  {% empty %}
-  <li>Aucun résultat</li>
-  {% endfor %}
-</ul>
+{% block content %}
+
+<section class="mb-10">
+
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
+      Tous les posts
+    </h1>
+
+    <a href="{% url 'post_create' %}"
+      class="rounded-lg bg-gray-950 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800">
+      Publier un post
+    </a>
+  </div>
+
+  <p class="mt-3 text-base text-gray-500">
+    Découvrez tous les posts publiés sur notre blog.
+  </p>
+
+</section>
+
+
+<section>
+
+  {% if posts %}
+
+  <div class="grid gap-6 sm:grid-cols-2">
+
+    {% for post in posts %}
+
+    <article
+      class="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:shadow-md">
+      <a href="{% url 'post' id=post.id %}" class="flex flex-col">
+        <div class="h-44 overflow-hidden bg-gray-100">
+
+          {% if post.imageUrl %}
+          <img src="{{ post.imageUrl }}" alt="{{ post.title }}"
+            class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+
+          {% else %}
+          <div class="flex h-full items-center justify-center text-gray-400">
+            <i class="fa-regular fa-image text-2xl"></i>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="p-6">
+          <div class="mb-3 flex flex-wrap items-center gap-3">
+
+            {% if post.createAt %}
+
+            <span class="text-xs text-gray-400">Publié le {{ post.createAt|date:"d/m/Y" }}</span>
+
+            {% endif %}
+
+          </div>
+
+          <h2 class="text-lg font-semibold tracking-tight text-gray-950 transition group-hover:text-gray-600">
+            {{post.title }}</h2>
+          <span class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-gray-900">Lire l'article
+            <i class="fa-solid fa-arrow-right text-xs transition group-hover:translate-x-1"></i>
+          </span>
+        </div>
+      </a>
+    </article>
+    {% endfor %}
+  </div>
+
+  {% else %}
+
+  <div class="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
+
+    <i class="fa-regular fa-file-lines mb-4 text-3xl text-gray-300"></i>
+
+    <h3 class="text-lg font-semibold text-gray-900">Aucun résultat </h3>
+
+    <p class="mt-2 text-sm text-gray-500">
+      Il n'y a encore aucune publication sur le blog.
+    </p>
+
+  </div>
+
+  {% endif %}
+
+</section>
 
 {% endblock %}

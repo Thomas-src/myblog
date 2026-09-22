@@ -2,22 +2,26 @@ from django.http import Http404
 from django.shortcuts import render
 from django.views.generic.base import View
 
-from .models import User, Category, Post
+from .models import Category, Post
 
 from django.conf import settings
 from django.shortcuts import redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.models import User
 
 # Create your views here.
 
 class IndexView(View):
     def get(self, request):
-        return render(request, 'blog_app/index.html')
+        context = { 
+            'latest_post': Post.objects.latest('createAt')
+        }
+        return render(request, 'blog_app/index.html', context)
     
 
 class PostListView(View):
     def get(self, request):
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by('-id')
 
         context = {
             'posts': posts,
@@ -78,6 +82,21 @@ class UserView(View):
         }
 
         return render(request, 'blog_app/user.html', context)
+
+class UserProfileView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+                    return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            raise Http404("User does not exist")
+        
+        context = {
+            'user': user,
+        }
+
+        return render(request, 'blog_app/profile.html', context)
     
 
 class CreatePostView(View):
@@ -141,13 +160,26 @@ class CreatePostView(View):
 
 class loginview(View):
     def post(self,request):
-        user = authenticate(request, username=request.POST["username"],
-                            password=request.POST["password"])
+         
+        user = authenticate(request, username=request.POST["username"],password=request.POST["password"])
+
         if user:
             login(request, user)
-            return redirect('post_list')
+        return redirect('post_list')
+
         return render(request, 'blog_app/index.html')
     
 class SignUpView(View):
     def  post(self,request):
+        if request.user.is_authenticated:
+                    return redirect("profile")
+        
         return render(request, 'blog_app/index.html')
+
+class LogoutView(View):
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+
+        logout(request)
+        return redirect('index')

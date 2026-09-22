@@ -21,7 +21,7 @@ class Post(models.Model):
   imageUrl = models.CharField(max_length=100, verbose_name="lien image")
   createAt = models.DateTimeField(verbose_name="date de création", auto_now_add=True)
   creator = models.ForeignKey(User, verbose_name="Utilisateur", related_name='posts', on_delete=models.CASCADE)
-  categories = models.ManyToManyField('Category', verbose_name="Catégorie", related_name='categories')
+  categories = models.ManyToManyField('Category', verbose_name="Catégorie", related_name='posts')
 
   class Meta:
     ordering = ('title','description','imageUrl','creator','createAt', )

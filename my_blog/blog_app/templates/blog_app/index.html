@@ -1,15 +1,127 @@
 {% extends 'base.html' %}
-{% block title %}Démo Django{% endblock %}
+
+{% block title %}Accueil — MyBlog{% endblock %}
+
 
 {% block content %}
-{% load static %}
 
-<h2>Démo Django</h2>
+<section class="mb-14">
 
-<p>Mon premier site Django</p>
+  <div class="max-w-2xl">
 
-<p>
-  <img class="img-thumbnail" src="{% static 'img/icon.png' %}" alt="Python Django">
-</p>
+    <h1 class="mt-5 text-4xl font-bold tracking-tight text-gray-950 sm:text-5xl">
+      Démo Django
+    </h1>
+
+    <p class="mt-5 text-lg leading-8 text-gray-500">
+      Bienvenue sur MyBlog.
+      Découvrez les dernières publications de notre communauté.
+    </p>
+
+  </div>
+
+</section>
+
+<section>
+
+  <div class="mb-6 flex items-end justify-between">
+
+    <div>
+
+      <h2 class="text-2xl font-semibold tracking-tight text-gray-950">Dernier post</h2>
+
+      <p class="mt-1 text-sm text-gray-500">
+        La dernière publication du blog.
+      </p>
+
+    </div>
+
+
+    <a href="{% url 'post_list' %}"
+      class="hidden text-sm font-medium text-gray-600 transition hover:text-gray-950 sm:block">
+      Voir tous les posts
+      <span aria-hidden="true">→</span>
+    </a>
+
+  </div>
+
+
+  {% if latest_post %}
+
+  <article
+    class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:shadow-md">
+
+    <div class="grid md:grid-cols-2">
+      <div class="min-h-64 overflow-hidden bg-gray-100">
+
+        {% if latest_post.imageUrl %}
+
+        <img src="{{ latest_post.imageUrl }}" alt="{{ latest_post.title }}"
+          class="h-full min-h-64 w-full object-cover transition duration-500 hover:scale-105">
+
+        {% else %}
+
+        <div class="flex min-h-64 items-center justify-center text-gray-400">
+
+          <div class="text-center">
+
+            <i class="fa-regular fa-image mb-3 text-3xl"></i>
+
+            <p class="text-sm">
+              Aucune image
+            </p>
+
+          </div>
+
+        </div>
+
+        {% endif %}
+
+      </div>
+
+      <div class="flex flex-col justify-center p-8 sm:p-10">
+
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+
+          <span class="text-xs text-gray-400">Publié le {{ latest_post.createAt|date:"d/m/Y" }}</span>
+
+        </div>
+        <h3 class="text-2xl font-semibold tracking-tight text-gray-950">
+          {{ latest_post.title }}
+        </h3>
+        <p class="mt-4 leading-7 text-gray-500">
+          {{ latest_post.description }}
+        </p>
+
+        <div class="mt-8">
+
+          <a href="{% url 'post' id=latest_post.id %}" class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+            Lire l'article
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+
+  {% else %}
+  <div class="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
+
+    <i class="fa-regular fa-file-lines mb-4 text-3xl text-gray-300"></i>
+
+    <h3 class="text-lg font-semibold text-gray-900">
+      Aucun post
+    </h3>
+
+    <p class="mt-2 text-sm text-gray-500">
+      Il n'y a encore aucune publication sur le blog.
+    </p>
+
+  </div>
+
+  {% endif %}
+
+</section>
 
 {% endblock %}

@@ -12,53 +12,65 @@
 
   <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
 </head>
 
-<body>
-  <!--
-      Navbar & Banner
-    -->
-  <nav>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <a href="{% url 'index' %}">Accueil</a>
-          <a href="{% url 'post_list' %}">Posts</a>
-          <a href="{% url 'category_list' %}">Catégories</a>
-        </div>
-      </div>
-    </div>
-  </nav>
+<body class="bg-white text-gray-700 antialiased min-h-screen flex flex-col">
 
-  <main>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          {% block content %}{% endblock %}
-        </div>
+  <!-- Navbar -->
+  <header class="border-b border-gray-100">
+    <nav>
+      <ul class="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
+        <a href="{% url 'index' %}" class="text-base font-semibold tracking-tight text-gray-950">
+          MyBlog
+        </a>
+        <div class="flex gap-6 text-sm font-medium text-gray-500">
+          <li><a href="{% url 'index' %}" class="hover:text-gray-950 transition-colors">Accueil</a></li>
+          <li><a href="{% url 'post_list' %}" class="hover:text-gray-950 transition-colors">Posts</a></li>
+          <li><a href="{% url 'category_list' %}" class="hover:text-gray-950 transition-colors">Catégories</a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'profile' %}" class="hover:text-gray-950 transition-colors">Profil</a></li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}" class="space-y-5">
+              {% csrf_token %}
+              <input type="submit" value="Déconnexion"
+                class="hover:text-gray-950 transition-colors">
+            </form>
+          </li>
+          {% endif %}
+          {% if not user.is_authenticated %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Connexion</a>
+          </li>
+          {% endif %}
+      </ul>
+
+
       </div>
+    </nav>
+  </header>
+
+  <!-- Content -->
+  <main class="flex-1">
+    <div class="max-w-4xl mx-auto px-6 py-12">
+      {% block content %}{% endblock %}
     </div>
   </main>
 
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12 text-center">
-          <p>Copyright &copy; Thomas Derdeyn 2026</p>
-        </div>
-      </div>
+  <!-- Footer -->
+  <footer class="border-t border-gray-100">
+    <div class="max-w-4xl mx-auto px-6 py-8 text-center text-sm text-gray-400">
+      <p>&copy; Thomas Derdeyn 2026</p>
     </div>
   </footer>
 
-  <!-- Placed at the end of the document so the pages load faster -->
-  <!-- jQuery, Popper.js, Tailwindcss -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </body>
 
 </html>

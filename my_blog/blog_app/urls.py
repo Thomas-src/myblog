@@ -13,6 +13,8 @@ urlpatterns = [
     path('post/create/', views.CreatePostView.as_view(), name="post_create"),
 
     path("accounts/login/", auth_views.LoginView.as_view(), name="login"),
-   path('accounts/signup/', views.SignUpView.as_view(), name='signup'),
+    path('accounts/signup/', views.SignUpView.as_view(), name='signup'),
+    path('accounts/logout/', views.LogoutView.as_view(), name='logout'),
+     path('accounts/profile/', views.UserProfileView.as_view(), name='profile'),
 ]
 
