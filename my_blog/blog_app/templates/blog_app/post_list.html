@@ -26,12 +26,9 @@
 
 
 <section>
-
-  {% if posts %}
-
   <div class="grid gap-6 sm:grid-cols-2">
 
-    {% for post in posts %}
+    {% for post in page_obj %}
 
     <article
       class="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:shadow-md">
@@ -68,24 +65,24 @@
         </div>
       </a>
     </article>
+
+    {% empty %}
+
+    <div class="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
+
+      <i class="fa-regular fa-file-lines mb-4 text-3xl text-gray-300"></i>
+
+      <h3 class="text-lg font-semibold text-gray-900">Aucun résultat </h3>
+
+      <p class="mt-2 text-sm text-gray-500">
+        Il n'y a encore aucune publication sur le blog.
+      </p>
+
+    </div>
+
     {% endfor %}
   </div>
 
-  {% else %}
-
-  <div class="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
-
-    <i class="fa-regular fa-file-lines mb-4 text-3xl text-gray-300"></i>
-
-    <h3 class="text-lg font-semibold text-gray-900">Aucun résultat </h3>
-
-    <p class="mt-2 text-sm text-gray-500">
-      Il n'y a encore aucune publication sur le blog.
-    </p>
-
-  </div>
-
-  {% endif %}
 
 </section>
 

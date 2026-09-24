@@ -28,15 +28,17 @@ class IndexView(View):
     
 
 class PostListView(View):
+    paginate_by = 6
     def get(self, request):
       
         try:
-            posts = Post.objects.all().order_by('-id')
+            posts = Post.objects.all().order_by('-createAt')
         except Post.DoesNotExist:
             posts = None
-
+        paginator = Paginator(posts, self.paginate_by)
+        page_obj = paginator.get_page(request.GET.get('page'))
         context = {
-            'posts': posts,
+            'page_obj': page_obj,
         }
 
         return render(request, 'blog_app/post_list.html', context)
@@ -52,12 +54,14 @@ class PostView(View):
         
         context = {
             'post': post,
+            "post_categories" : post.categories.all().order_by('-id')
         }
 
         return render(request, 'blog_app/post.html', context)
 
 
 class CategoryView(View):
+    paginate_by = 6
     def get(self, request, id):
         try:
             category = Category.objects.get(id=id)
@@ -65,19 +69,25 @@ class CategoryView(View):
             messages.error(request, "La catégorie n'existe pas")
             return redirect("category_list")
         
-
+        posts = category.posts.all().order_by('-createAt')
+        paginator = Paginator(posts, self.paginate_by)
+        page_obj = paginator.get_page(request.GET.get('page'))
         context = {
             'category': category,
+            "page_obj":page_obj,
         }
 
         return render(request, 'blog_app/category.html', context)
 
 class CategoryListView(View):
+    paginate_by = 18
     def get(self, request):
         categories = Category.objects.all()
+        paginator = Paginator(categories, self.paginate_by)
+        page_obj = paginator.get_page(request.GET.get('page'))
 
         context = {
-            'categories': categories,
+            'page_obj': page_obj,
         }
 
         return render(request, 'blog_app/category_list.html', context)
@@ -237,7 +247,6 @@ class CreatePostView(View):
             }
             return render(request, 'blog_app/post_create.html', context)
 
-        # Instancier l'objet
         title = request.POST.get("title", "").strip()
         post = Post.objects.create(
             title=title,
@@ -245,7 +254,6 @@ class CreatePostView(View):
             image=image,
             creator=request.user,
         )
-        # Ajouter l'objet
         if category_ids:
             post.categories.set(category_ids)
 
