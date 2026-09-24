@@ -9,7 +9,6 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-
 # Create your views here.
 
 class IndexView(View):
@@ -395,7 +394,6 @@ class DeleteCategoryView(View):
               
 class loginview(View):
     def post(self,request):
-         
         user = authenticate(request, username=request.POST["username"],password=request.POST["password"])
 
         if user:
@@ -403,11 +401,28 @@ class loginview(View):
         return redirect("index")
     
 class SignUpView(View):
-    def  post(self,request):
+
+    def get(self, request):
         if request.user.is_authenticated:
-                    return redirect("profile")
-        
-        return render(request, "blog_app/index.html")
+            return redirect("profile")
+        return render(request,"blog_app/signup.html")
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            return redirect("profile")
+
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        if not username or not password:
+            return render(request,"blog_app/signup.html",{"error": "Tous les champs sont obligatoires."})
+
+        if User.objects.filter(username=username).exists():
+            return render(request,"blog_app/signup.html",{"error": "Ce nom d'utilisateur existe déjà."})
+
+        User.objects.create_user( username=username,password=password)
+
+        return redirect("login")
 
 class LogoutView(View):
     def post(self, request):
