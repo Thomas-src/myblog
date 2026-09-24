@@ -95,7 +95,11 @@ class CategoryEditView(View):
                         context =  {"category_name": category_name,"category": category,}
                         messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
                         return render(request,"blog_app/category_create.html",context)
-                # TODO verifier si categorie existe deja
+                # verifier si categorie existe deja
+                if Category.objects.filter(name=category_name).exists():
+                    messages.error(request, "Une catégorie avec ce nom existe déjà")
+                    return render(request, "blog_app/category_create.html", context)
+               
                 category.name = category_name
                 category.save()
                 messages.success(request,"Catégorie modifiée avec succès")
@@ -351,7 +355,10 @@ class CreateCategoryView(View):
                     context =  {"category_name": category_name, }
                     messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
                     return render(request,"blog_app/category_create.html",context)
-            # TODO verifier si categorie existe deja
+             # verifier si categorie existe deja
+            if Category.objects.filter(name=category_name).exists():
+                messages.error(request, "Une catégorie avec ce nom existe déjà")
+                return render(request, "blog_app/category_create.html", context)
             category = Category.objects.create(name=category_name)
             messages.success(request,"Catégorie créée avec succès")
             return redirect("category", id=category.id)
