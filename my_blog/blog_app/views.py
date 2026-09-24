@@ -16,15 +16,15 @@ class IndexView(View):
     def get(self, request):
 
         try:
-            latest = Post.objects.latest('createAt')
+            latest = Post.objects.latest("createAt")
         except Post.DoesNotExist:
             latest = None
 
         context = {
-            'latest_post': latest
+            "latest_post": latest
         }
 
-        return render(request, 'blog_app/index.html', context)
+        return render(request, "blog_app/index.html", context)
     
 
 # Posts views
@@ -34,16 +34,16 @@ class PostListView(View):
     def get(self, request):
       
         try:
-            posts = Post.objects.all().order_by('-createAt')
+            posts = Post.objects.all().order_by("-createAt")
         except Post.DoesNotExist:
             posts = None
         paginator = Paginator(posts, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get('page'))
+        page_obj = paginator.get_page(request.GET.get("page"))
         context = {
-            'page_obj': page_obj,
+            "page_obj": page_obj,
         }
 
-        return render(request, 'blog_app/post_list.html', context)
+        return render(request, "blog_app/post_list.html", context)
     
 class PostView(View):
     def get(self, request, id):
@@ -54,11 +54,11 @@ class PostView(View):
             return redirect("post_list")
         
         context = {
-            'post': post,
-            "post_categories" : post.categories.all().order_by('-id')
+            "post": post,
+            "post_categories" : post.categories.all().order_by("-id")
         }
 
-        return render(request, 'blog_app/post.html', context)
+        return render(request, "blog_app/post.html", context)
 
 class CategoryEditView(View):
     def get(self, request, id):
@@ -74,10 +74,10 @@ class CategoryEditView(View):
         
 
         context = {
-            'category': category,
+            "category": category,
         }
 
-        return render(request, 'blog_app/category_edit.html', context)
+        return render(request, "blog_app/category_edit.html", context)
 
     def post(self, request, id):
                 # Vérifier connexion utilisateur
@@ -87,7 +87,7 @@ class CategoryEditView(View):
                 try:
                     category = Category.objects.get(id=id)
                 except Category.DoesNotExist:
-                     messages.error(request,"La catégorie n,existe pas")
+                     messages.error(request,"La catégorie n'existe pas")
                      return redirect("category_list")
                 
                 category_name = request.POST.get("category_name", "").strip()
@@ -110,17 +110,17 @@ class CreatePostView(View):
         categories = Category.objects.all()
 
         context = {
-            'categories': categories,
+            "categories": categories,
         }
 
-        return render(request, 'blog_app/post_create.html', context)
+        return render(request, "blog_app/post_create.html", context)
 
     def post(self, request):
         # Vérifier connexion utilisateur
         if not request.user.is_authenticated:
             context = {
-            'categories': Category.objects.all(),
-            'form': {'title': '', 'description': '', 'image': '', 'categories': []},
+            "categories": Category.objects.all(),
+            "form": {"title": "", "description": "", "image": "", "categories": []},
             }
             return redirect(f"{settings.LOGIN_URL}?next={request.path}",context)
         
@@ -137,15 +137,15 @@ class CreatePostView(View):
         if not title or not description:
             messages.error(request,"Le titre et la description sont obligatoires.")
             context = {
-                'categories': categories,
-                'form': {
-                    'title':title,
-                    'description':description,
-                    'image':image,
-                    'category_ids':category_ids
+                "categories": categories,
+                "form": {
+                    "title":title,
+                    "description":description,
+                    "image":image,
+                    "category_ids":category_ids
                 }
             }
-            return render(request, 'blog_app/post_create.html', context)
+            return render(request, "blog_app/post_create.html", context)
 
         title = request.POST.get("title", "").strip()
         post = Post.objects.create(
@@ -158,7 +158,7 @@ class CreatePostView(View):
             post.categories.set(category_ids)
 
         messages.success(request,"Le post a été créé avec succès")
-        return redirect('post', id=post.id)
+        return redirect("post", id=post.id)
 
 class EditPostView(View):
      def get(self, request,id):
@@ -173,9 +173,11 @@ class EditPostView(View):
                 messages.error(request, "Vous ne pouvez modifier que vos propres posts")
                 return redirect("profile")
 
-            context = {  'post': post,'categories': Category.objects.all(), }
+            context = {  "post": post,
+                       "categories": Category.objects.all(),
+                       "selected_ids": list(post.categories.values_list("id", flat=True)), }
             
-            return render(request, 'blog_app/post_edit.html', context)
+            return render(request, "blog_app/post_edit.html", context)
     
      def post(self, request,id):
             if not request.user.is_authenticated:
@@ -199,24 +201,24 @@ class EditPostView(View):
             if not title or not description:
                 messages.success(request,"Le titre et la description sont obligatoire")
                 context = {
-                'post': post,
-                'categories': Category.objects.all(),
-                'form': {'title': title, 'description': description},
-                'selected_ids': [int(i) for i in category_ids],
+                "post": post,
+                "categories": Category.objects.all(),
+                "form": {"title": title, "description": description},
+                "selected_ids": list(post.categories.values_list("id", flat=True)),
                 }
-                return render(request, 'blog_app/post_edit.html', context)
+                return render(request, "blog_app/post_edit.html", context)
             post.title = title
             post.description = description
 
             if image:
                 if post.image:
-                    post.image.delete(save=False)
-                    post.image = image
+                        post.image.delete(save=False)
+                post.image = image
 
             post.save()
             post.categories.set(category_ids)
             messages.success(request,"Le post a été modifié avec succès")
-            return redirect('post', id=post.id)
+            return redirect("post", id=post.id)
 
 class DeletePostView(View):
     def get(self, request,id):
@@ -232,8 +234,8 @@ class DeletePostView(View):
             messages.error(request, "Vous ne pouvez modifier que vos propres posts")
             return redirect("profile")
         
-        context = {  'post': post }
-        return render(request, 'blog_app/post_delete.html', context)
+        context = {  "post": post }
+        return render(request, "blog_app/post_delete.html", context)
     def post(self, request, id):
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
@@ -265,15 +267,15 @@ class UserView(View):
             messages.error(request, "L'utilisateur n'existe pas")
             return redirect("index")
 
-        posts = user.posts.all().order_by('-createAt')
+        posts = user.posts.all().order_by("-createAt")
         paginator = Paginator(posts, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get('page'))
+        page_obj = paginator.get_page(request.GET.get("page"))
         context = {
-            'user': user,
+            "user": user,
             "page_obj":page_obj,
         }
 
-        return render(request, 'blog_app/user.html', context)
+        return render(request, "blog_app/user.html", context)
 
 class UserProfileView(View):
     paginate_by = 6
@@ -287,11 +289,11 @@ class UserProfileView(View):
         except User.DoesNotExist:
             return redirect("index")
 
-        posts = user.posts.all().order_by('-createAt')
+        posts = user.posts.all().order_by("-createAt")
         paginator = Paginator(posts, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get('page'))
+        page_obj = paginator.get_page(request.GET.get("page"))
         context = {
-            'user': user,
+            "user": user,
             "page_obj":page_obj,
         }
 
@@ -308,28 +310,28 @@ class CategoryView(View):
             messages.error(request, "La catégorie n'existe pas")
             return redirect("category_list")
         
-        posts = category.posts.all().order_by('-createAt')
+        posts = category.posts.all().order_by("-createAt")
         paginator = Paginator(posts, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get('page'))
+        page_obj = paginator.get_page(request.GET.get("page"))
         context = {
-            'category': category,
+            "category": category,
             "page_obj":page_obj,
         }
 
-        return render(request, 'blog_app/category.html', context)
+        return render(request, "blog_app/category.html", context)
 
 class CategoryListView(View):
     paginate_by = 18
     def get(self, request):
         categories = Category.objects.all()
         paginator = Paginator(categories, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get('page'))
+        page_obj = paginator.get_page(request.GET.get("page"))
 
         context = {
-            'page_obj': page_obj,
+            "page_obj": page_obj,
         }
 
-        return render(request, 'blog_app/category_list.html', context)
+        return render(request, "blog_app/category_list.html", context)
      
 class CreateCategoryView(View):
     def get(self, request):
@@ -337,7 +339,7 @@ class CreateCategoryView(View):
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
 
-        return render(request, 'blog_app/category_create.html')
+        return render(request, "blog_app/category_create.html")
 
     def post(self, request):
             # Vérifier connexion utilisateur
@@ -370,8 +372,8 @@ class DeleteCategoryView(View):
             messages.error(request,"La catégorie ne peut pas être supprimée, elle est liée à plus d'un post")
             return redirect("category_list")
         
-        context = {  'category': category }
-        return render(request, 'blog_app/category_delete.html', context)
+        context = {  "category": category }
+        return render(request, "blog_app/category_delete.html", context)
     def post(self, request, id):
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
@@ -398,14 +400,14 @@ class loginview(View):
 
         if user:
             login(request, user)
-        return redirect('index')
+        return redirect("index")
     
 class SignUpView(View):
     def  post(self,request):
         if request.user.is_authenticated:
                     return redirect("profile")
         
-        return render(request, 'blog_app/index.html')
+        return render(request, "blog_app/index.html")
 
 class LogoutView(View):
     def post(self, request):
@@ -413,4 +415,4 @@ class LogoutView(View):
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
 
         logout(request)
-        return redirect('index')
+        return redirect("index")

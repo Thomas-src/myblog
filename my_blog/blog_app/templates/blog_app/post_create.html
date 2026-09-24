@@ -25,21 +25,21 @@
         <input type="file" accept="image/*" capture="camera" name="image" id="image" value="{{form.image}}" class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">
         </div>
 
-          <div class="flex flex-wrap gap-2">
-    {% for category in categories %}
-    <label class="cursor-pointer">
-        <input type="checkbox" name="categories" value="{{ category.id }}" class="peer sr-only"
-            {% if category.id in selected_ids %}checked{% endif %}>
-        <span class="inline-block border border-gray-300 px-3 py-1 text-sm bg-white
+         <div class="flex flex-wrap gap-2">
+            {% for category in categories %}
+            <label class="cursor-pointer">
+                <input type="checkbox" name="categories" value="{{ category.id }}" class="peer sr-only" {% if
+                    category.id in selected_ids %}checked{% endif %}>
+                <span class="inline-block border border-gray-300 px-3 py-1 text-sm bg-white
              peer-checked:bg-gray-900 peer-checked:text-white peer-checked:border-gray-900
              peer-focus-visible:ring-2 peer-focus-visible:ring-gray-400">
-            {{ category.name }}
-        </span>
-    </label>
-    {% empty %}
-    <p class="text-sm text-gray-500">Aucune catégorie</p>
-    {% endfor %}
-    </div>
+                    {{ category.name }}
+                </span>
+            </label>
+            {% empty %}
+            <p class="text-sm text-gray-500">Aucune catégorie</p>
+            {% endfor %}
+        </div>
 
         <input type="submit" value="Publier" class="w-full border border-gray-900 px-4 py-2 text-sm text-gray-900 hover:bg-gray-900 hover:text-white transition-colors cursor-pointer">
     </form>
