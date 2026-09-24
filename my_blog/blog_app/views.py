@@ -90,15 +90,15 @@ class CategoryEditView(View):
                      return redirect("category_list")
                 
                 category_name = request.POST.get("category_name", "").strip()
-    
+                context =  {"category_name": category_name,"category": category,}
                 if not category_name:
-                        context =  {"category_name": category_name,"category": category,}
+                        
                         messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
-                        return render(request,"blog_app/category_create.html",context)
+                        return render(request,"blog_app/category_edit.html",context)
                 # verifier si categorie existe deja
                 if Category.objects.filter(name=category_name).exists():
                     messages.error(request, "Une catégorie avec ce nom existe déjà")
-                    return render(request, "blog_app/category_create.html", context)
+                    return render(request, "blog_app/category_edit.html", context)
                
                 category.name = category_name
                 category.save()
@@ -348,11 +348,11 @@ class CreateCategoryView(View):
             # Vérifier connexion utilisateur
             if not request.user.is_authenticated:
                 return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-    
+            
             category_name = request.POST.get("category_name", "").strip()
-
+            context =  {"category_name": category_name, }
             if not category_name:
-                    context =  {"category_name": category_name, }
+                    
                     messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
                     return render(request,"blog_app/category_create.html",context)
              # verifier si categorie existe deja
@@ -418,8 +418,8 @@ class SignUpView(View):
         if request.user.is_authenticated:
             return redirect("profile")
 
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        username = request.POST.get("username").strip()
+        password = request.POST.get("password").strip()
 
         if not username or not password:
             return render(request,"blog_app/signup.html",{"error": "Tous les champs sont obligatoires."})
