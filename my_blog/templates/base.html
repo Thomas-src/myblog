@@ -37,8 +37,7 @@
           <li class="nav-item">
             <form method="post" action="{% url 'logout' %}" class="space-y-5">
               {% csrf_token %}
-              <input type="submit" value="Déconnexion"
-                class="hover:text-gray-950 transition-colors">
+              <input type="submit" value="Déconnexion" class="hover:text-gray-950 transition-colors">
             </form>
           </li>
           {% endif %}
@@ -58,9 +57,81 @@
   <!-- Content -->
   <main class="flex-1">
     <div class="max-w-4xl mx-auto px-6 py-12">
-      {% block content %}{% endblock %}
+      <!-- Toast -->
+      {% if messages %}
+      <div class="mb-6 space-y-3">
+
+        {% for message in messages %}
+
+        <div role="alert" class="flex items-center rounded-lg border px-4 py-3 text-sm
+                {% if message.tags == 'success' %}
+                    border-green-200 bg-green-50 text-green-800
+                {% elif message.tags == 'error' %}
+                    border-red-200 bg-red-50 text-red-800
+                {% elif message.tags == 'warning' %}
+                    border-yellow-200 bg-yellow-50 text-yellow-800
+                {% elif message.tags == 'info' %}
+                    border-blue-200 bg-blue-50 text-blue-800
+                {% else %}
+                    border-gray-200 bg-gray-50 text-gray-800
+                {% endif %}">
+
+          <span class="flex-1">
+            {{ message }}
+          </span>
+
+          <button type="button" onclick="this.parentElement.remove()"
+            class="ml-4 text-lg leading-none opacity-50 transition hover:opacity-100" aria-label="Fermer">
+            &times;
+          </button>
+
+        </div>
+        {% endfor %}
+
+      </div>
+      {% endif %}
+
+      {% block content %}
+
+      {% endblock %}
+      {% if page_obj %}
+      <!-- Paginator -->
+      <div class="flex justify-center items-center mt-6">
+        <span class="flex items-center gap-4">
+
+          {% if page_obj.has_previous %}
+          <a href="?page=1" class="text-blue-600 font-bold underline hover:text-blue-800">
+            &laquo; first
+          </a>
+
+          <a href="?page={{ page_obj.previous_page_number }}"
+            class="text-blue-600 font-bold underline hover:text-blue-800">
+            previous
+          </a>
+          {% endif %}
+
+          <span class="font-bold text-gray-700">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+
+          {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}" class="text-blue-600 font-bold underline hover:text-blue-800">
+            next
+          </a>
+
+          <a href="?page={{ page_obj.paginator.num_pages }}"
+            class="text-blue-600 font-bold underline hover:text-blue-800">
+            last &raquo;
+          </a>
+          {% endif %}
+
+        </span>
+      </div>
+
+      {% endif %}
     </div>
   </main>
+
 
   <!-- Footer -->
   <footer class="border-t border-gray-100">

@@ -10,7 +10,7 @@
   <div class="max-w-2xl">
 
     <h1 class="mt-5 text-4xl font-bold tracking-tight text-gray-950 sm:text-5xl">
-      Démo Django
+      MyBlog, votres espace de blog
     </h1>
 
     <p class="mt-5 text-lg leading-8 text-gray-500">
@@ -54,9 +54,9 @@
     <div class="grid md:grid-cols-2">
       <div class="min-h-64 overflow-hidden bg-gray-100">
 
-        {% if latest_post.imageUrl %}
+        {% if latest_post.image %}
 
-        <img src="{{ latest_post.imageUrl }}" alt="{{ latest_post.title }}"
+        <img src="{{ latest_post.image.url }}" alt="{{ latest_post.title }}"
           class="h-full min-h-64 w-full object-cover transition duration-500 hover:scale-105">
 
         {% else %}

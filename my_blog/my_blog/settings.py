@@ -70,6 +70,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'my_blog.wsgi.application'
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases

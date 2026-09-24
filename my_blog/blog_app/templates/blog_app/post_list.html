@@ -38,8 +38,8 @@
       <a href="{% url 'post' id=post.id %}" class="flex flex-col">
         <div class="h-44 overflow-hidden bg-gray-100">
 
-          {% if post.imageUrl %}
-          <img src="{{ post.imageUrl }}" alt="{{ post.title }}"
+          {% if post.image %}
+          <img src="{{ post.image.url }}" alt="{{ post.title }}"
             class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
 
           {% else %}

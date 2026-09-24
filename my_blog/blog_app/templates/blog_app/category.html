@@ -22,8 +22,8 @@
             class="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:shadow-md">
             <a href="{% url 'post' id=post.id %}" class="flex flex-col">
                 <div class="h-44 overflow-hidden bg-gray-100">
-                    {% if post.imageUrl %}
-                    <img src="{{ post.imageUrl }}" alt="{{ post.title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
                     {% else %}
                     <div class="flex h-full items-center justify-center text-gray-400">
                         <i class="fa-regular fa-image text-2xl"></i>

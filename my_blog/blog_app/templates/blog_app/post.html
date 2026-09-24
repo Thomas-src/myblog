@@ -26,7 +26,7 @@
 
       <span class="text-xs text-gray-400">
         Publié le {{ post.createAt|date:"d F Y" }} - Par 
-      <a href="{% url 'user' id=user.id %}" class="text-xs font-medium">
+      <a href="{% url 'user' id=post.creator.id %}" class="text-xs font-medium">
         {{ post.creator.username }}
       </a>
       </span>
@@ -39,10 +39,10 @@
 
   </header>
 
-  {% if post.imageUrl %}
+  {% if post.image %}
 
   <div class="mb-10 overflow-hidden rounded-2xl border border-gray-200 bg-gray-100">
-    <img src="{{ post.imageUrl }}" alt="{{ post.title }}" class="h-auto w-full object-cover">
+    <img src="{{ post.image.url }}" alt="{{ post.title }}" class="h-auto w-full object-cover">
   </div>
 
   {% endif %}

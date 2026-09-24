@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Créer un post{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="max-w-xl mx-auto px-4 py-10">
+    <h2 class="text-xl font-semibold text-gray-900 mb-6">Créer votre post</h2>
+
+    <form method="post" action="{% url 'post_create' %}" enctype="multipart/form-data" class="space-y-5" >
+        {% csrf_token %}
+
+        <div>
+            <label for="title_post" class="block text-sm text-gray-700 mb-1">Titre du post*</label>
+            <input required type="text" name="title" id="title_post" value="{{form.title}}" class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">
+        </div>
+
+        <div>
+            <label for="description" class="block text-sm text-gray-700 mb-1">Description*</label>
+            <textarea required name="description" placeholder="Description" id="description" rows="5" class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">{{form.description}}</textarea>
+        </div>
+
+        <div>
+            <label for="image" class="block text-sm text-gray-700 mb-1">Lien image</label>
+        <input type="file" accept="image/*" capture="camera" name="image" id="image" value="{{form.image}}" class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">
+        </div>
+
+          <div class="flex flex-wrap gap-2">
+    {% for category in categories %}
+    <label class="cursor-pointer">
+        <input type="checkbox" name="categories" value="{{ category.id }}" class="peer sr-only"
+            {% if category.id in selected_ids %}checked{% endif %}>
+        <span class="inline-block border border-gray-300 px-3 py-1 text-sm bg-white
+             peer-checked:bg-gray-900 peer-checked:text-white peer-checked:border-gray-900
+             peer-focus-visible:ring-2 peer-focus-visible:ring-gray-400">
+            {{ category.name }}
+        </span>
+    </label>
+    {% empty %}
+    <p class="text-sm text-gray-500">Aucune catégorie</p>
+    {% endfor %}
+    </div>
+
+        <input type="submit" value="Publier" class="w-full border border-gray-900 px-4 py-2 text-sm text-gray-900 hover:bg-gray-900 hover:text-white transition-colors cursor-pointer">
+    </form>
+</div>
+
+{% endblock %}
