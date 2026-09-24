@@ -27,6 +27,8 @@ class IndexView(View):
         return render(request, 'blog_app/index.html', context)
     
 
+# Posts views
+
 class PostListView(View):
     paginate_by = 6
     def get(self, request):
@@ -43,7 +45,6 @@ class PostListView(View):
 
         return render(request, 'blog_app/post_list.html', context)
     
-
 class PostView(View):
     def get(self, request, id):
         try:
@@ -58,107 +59,6 @@ class PostView(View):
         }
 
         return render(request, 'blog_app/post.html', context)
-
-
-class CategoryView(View):
-    paginate_by = 6
-    def get(self, request, id):
-        try:
-            category = Category.objects.get(id=id)
-        except Category.DoesNotExist:
-            messages.error(request, "La catégorie n'existe pas")
-            return redirect("category_list")
-        
-        posts = category.posts.all().order_by('-createAt')
-        paginator = Paginator(posts, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get('page'))
-        context = {
-            'category': category,
-            "page_obj":page_obj,
-        }
-
-        return render(request, 'blog_app/category.html', context)
-
-class CategoryListView(View):
-    paginate_by = 18
-    def get(self, request):
-        categories = Category.objects.all()
-        paginator = Paginator(categories, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get('page'))
-
-        context = {
-            'page_obj': page_obj,
-        }
-
-        return render(request, 'blog_app/category_list.html', context)
-    
-
-
-class UserView(View):
-    paginate_by = 6
-    def get(self, request, id):
-        try:
-            user = User.objects.get(id=id)
-        except User.DoesNotExist:
-            messages.error(request, "L'utilisateur n'existe pas")
-            return redirect("index")
-
-        posts = user.posts.all().order_by('-createAt')
-        paginator = Paginator(posts, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get('page'))
-        context = {
-            'user': user,
-            "page_obj":page_obj,
-        }
-
-        return render(request, 'blog_app/user.html', context)
-
-class UserProfileView(View):
-    paginate_by = 6
-
-    def get(self, request):
-        if not request.user.is_authenticated:
-            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-        
-        try:
-            user = User.objects.get(id=request.user.id)
-        except User.DoesNotExist:
-            return redirect("index")
-
-        posts = user.posts.all().order_by('-createAt')
-        paginator = Paginator(posts, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get('page'))
-        context = {
-            'user': user,
-            "page_obj":page_obj,
-        }
-
-        return render(request, "blog_app/profile.html", context)
-    
-class CreateCategoryView(View):
-    def get(self, request):
-        # Vérifier connexion utilisateur
-        if not request.user.is_authenticated:
-            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-
-        return render(request, 'blog_app/category_create.html')
-
-    def post(self, request):
-            # Vérifier connexion utilisateur
-            if not request.user.is_authenticated:
-                return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-    
-            category_name = request.POST.get("category_name", "").strip()
-
-            if not category_name:
-                    context =  {"category_name": category_name, }
-                    messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
-                    return render(request,"blog_app/category_create.html",context)
-            # TODO verifier si categorie existe deja
-            category = Category.objects.create(name=category_name)
-            messages.success(request,"Catégorie créée avec succès")
-            return redirect("category", id=category.id)
-        
 
 class CategoryEditView(View):
     def get(self, request, id):
@@ -317,7 +217,180 @@ class EditPostView(View):
             post.categories.set(category_ids)
             messages.success(request,"Le post a été modifié avec succès")
             return redirect('post', id=post.id)
-                 
+
+class DeletePostView(View):
+    def get(self, request,id):
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        try:
+            post = Post.objects.get(id=id)
+        except Post.DoesNotExist:
+            messages.error(request,"Le post n'existe pas")
+            return redirect("profile")
+
+        if post.creator != request.user:
+            messages.error(request, "Vous ne pouvez modifier que vos propres posts")
+            return redirect("profile")
+        
+        context = {  'post': post }
+        return render(request, 'blog_app/post_delete.html', context)
+    def post(self, request, id):
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        try:
+            post = Post.objects.get(id=id)
+        except Post.DoesNotExist:
+            messages.error(request,"Le post n'existe pas")
+            return redirect("profile")
+        
+        if post.creator != request.user:
+            messages.error(request, "Vous ne pouvez modifier que vos propres posts")
+            return redirect("profile")
+
+        if post.image:
+            post.image.delete(save=False)
+
+        post.delete()
+        messages.success(request, "Le post a été supprimé.")
+        return redirect("profile")
+
+# User views
+
+class UserView(View):
+    paginate_by = 6
+    def get(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            messages.error(request, "L'utilisateur n'existe pas")
+            return redirect("index")
+
+        posts = user.posts.all().order_by('-createAt')
+        paginator = Paginator(posts, self.paginate_by)
+        page_obj = paginator.get_page(request.GET.get('page'))
+        context = {
+            'user': user,
+            "page_obj":page_obj,
+        }
+
+        return render(request, 'blog_app/user.html', context)
+
+class UserProfileView(View):
+    paginate_by = 6
+
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return redirect("index")
+
+        posts = user.posts.all().order_by('-createAt')
+        paginator = Paginator(posts, self.paginate_by)
+        page_obj = paginator.get_page(request.GET.get('page'))
+        context = {
+            'user': user,
+            "page_obj":page_obj,
+        }
+
+        return render(request, "blog_app/profile.html", context)
+
+# Category views
+
+class CategoryView(View):
+    paginate_by = 6
+    def get(self, request, id):
+        try:
+            category = Category.objects.get(id=id)
+        except Category.DoesNotExist:
+            messages.error(request, "La catégorie n'existe pas")
+            return redirect("category_list")
+        
+        posts = category.posts.all().order_by('-createAt')
+        paginator = Paginator(posts, self.paginate_by)
+        page_obj = paginator.get_page(request.GET.get('page'))
+        context = {
+            'category': category,
+            "page_obj":page_obj,
+        }
+
+        return render(request, 'blog_app/category.html', context)
+
+class CategoryListView(View):
+    paginate_by = 18
+    def get(self, request):
+        categories = Category.objects.all()
+        paginator = Paginator(categories, self.paginate_by)
+        page_obj = paginator.get_page(request.GET.get('page'))
+
+        context = {
+            'page_obj': page_obj,
+        }
+
+        return render(request, 'blog_app/category_list.html', context)
+     
+class CreateCategoryView(View):
+    def get(self, request):
+        # Vérifier connexion utilisateur
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+
+        return render(request, 'blog_app/category_create.html')
+
+    def post(self, request):
+            # Vérifier connexion utilisateur
+            if not request.user.is_authenticated:
+                return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+    
+            category_name = request.POST.get("category_name", "").strip()
+
+            if not category_name:
+                    context =  {"category_name": category_name, }
+                    messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
+                    return render(request,"blog_app/category_create.html",context)
+            # TODO verifier si categorie existe deja
+            category = Category.objects.create(name=category_name)
+            messages.success(request,"Catégorie créée avec succès")
+            return redirect("category", id=category.id)
+        
+class DeleteCategoryView(View):
+    def get(self, request,id):
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        
+        try:
+            category = Category.objects.get(id=id)
+        except Category.DoesNotExist:
+            messages.error(request,"La catégorie n'existe pas")
+            return redirect("category_list")
+        
+        if category.posts.exists():
+            messages.error(request,"La catégorie ne peut pas être supprimée, elle est liée à plus d'un post")
+            return redirect("category_list")
+        
+        context = {  'category': category }
+        return render(request, 'blog_app/category_delete.html', context)
+    def post(self, request, id):
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        try:
+            category = Category.objects.get(id=id)
+        except Category.DoesNotExist:
+            messages.error(request,"La catégorie n'existe pas")
+            return redirect("category_list")
+        
+        if category.posts.exists():
+            messages.error(request,"La catégorie ne peut pas être supprimée, elle est liée à plus d'un post")
+            return redirect("category_list")
+        
+        category.delete()
+        messages.success(request, "La catégorie a été supprimé.")
+        return redirect("category_list")
+
+# Account views
+              
 class loginview(View):
     def post(self,request):
          
