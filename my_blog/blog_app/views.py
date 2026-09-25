@@ -428,6 +428,10 @@ class SignUpView(View):
             return render(request,"blog_app/signup.html",{"error": "Ce nom d'utilisateur existe déjà."})
 
         User.objects.create_user( username=username,password=password)
+        user = authenticate(request, username=request.POST["username"],password=request.POST["password"])
+        if user:
+            login(request, user)
+            return redirect("profile")
 
         return redirect("login")
 

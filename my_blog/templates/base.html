@@ -37,7 +37,7 @@
           <li class="nav-item">
             <form method="post" action="{% url 'logout' %}" class="space-y-5">
               {% csrf_token %}
-              <input type="submit" value="Déconnexion" class="hover:text-gray-950 transition-colors">
+              <input type="submit" value="Déconnexion" class="hover:text-gray-950 transition-colors cursor-pointer">
             </form>
           </li>
           {% endif %}
