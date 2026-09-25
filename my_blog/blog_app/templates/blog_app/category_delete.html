@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Supprimer une catégorie{% endblock %}
 
 {% block content %}
@@ -28,13 +29,6 @@
     </form>
 </div>
 
-<script>
-    document.getElementById('delete-form').addEventListener('submit', function (event) {
-        const confirmed = confirm('Voulez-vous vraiment supprimer la catégorie {{ category.name }} ?');
-        if (!confirmed) {
-            event.preventDefault();
-        }
-    });
-</script>
+<script src="{% static '/js/delete_category.mjs' %}"></script>
 
 {% endblock %}
