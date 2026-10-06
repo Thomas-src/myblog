@@ -42,7 +42,7 @@ class PostListView(View):
             "page_obj": page_obj,
         }
 
-        return render(request, "blog_app/post_list.html", context)
+        return render(request, "blog_app/post/post_list.html", context)
     
 class PostView(View):
     def get(self, request, id):
@@ -57,7 +57,7 @@ class PostView(View):
             "post_categories" : post.categories.all().order_by("-id")
         }
 
-        return render(request, "blog_app/post.html", context)
+        return render(request, "blog_app/post/post.html", context)
 
 class CategoryEditView(View):
     def get(self, request, id):
@@ -76,7 +76,7 @@ class CategoryEditView(View):
             "category": category,
         }
 
-        return render(request, "blog_app/category_edit.html", context)
+        return render(request, "blog_app/category/category_edit.html", context)
 
     def post(self, request, id):
                 # Vérifier connexion utilisateur
@@ -94,11 +94,11 @@ class CategoryEditView(View):
                 if not category_name:
                         
                         messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
-                        return render(request,"blog_app/category_edit.html",context)
+                        return render(request,"blog_app/category/category_edit.html",context)
                 # verifier si categorie existe deja
                 if Category.objects.filter(name=category_name).exists():
                     messages.error(request, "Une catégorie avec ce nom existe déjà")
-                    return render(request, "blog_app/category_edit.html", context)
+                    return render(request, "blog_app/category/category_edit.html", context)
                
                 category.name = category_name
                 category.save()
@@ -116,7 +116,7 @@ class CreatePostView(View):
             "categories": categories,
         }
 
-        return render(request, "blog_app/post_create.html", context)
+        return render(request, "blog_app/post/post_create.html", context)
 
     def post(self, request):
         # Vérifier connexion utilisateur
@@ -148,7 +148,7 @@ class CreatePostView(View):
                     "category_ids":category_ids
                 }
             }
-            return render(request, "blog_app/post_create.html", context)
+            return render(request, "blog_app/post/post_create.html", context)
 
         title = request.POST.get("title", "").strip()
         post = Post.objects.create(
@@ -180,7 +180,7 @@ class EditPostView(View):
                        "categories": Category.objects.all(),
                        "selected_ids": list(post.categories.values_list("id", flat=True)), }
             
-            return render(request, "blog_app/post_edit.html", context)
+            return render(request, "blog_app/post/post_edit.html", context)
     
      def post(self, request,id):
             if not request.user.is_authenticated:
@@ -209,7 +209,7 @@ class EditPostView(View):
                 "form": {"title": title, "description": description},
                 "selected_ids": list(post.categories.values_list("id", flat=True)),
                 }
-                return render(request, "blog_app/post_edit.html", context)
+                return render(request, "blog_app/post/post_edit.html", context)
             post.title = title
             post.description = description
 
@@ -238,7 +238,7 @@ class DeletePostView(View):
             return redirect("profile")
         
         context = {  "post": post }
-        return render(request, "blog_app/post_delete.html", context)
+        return render(request, "blog_app/post/post_delete.html", context)
     def post(self, request, id):
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
@@ -321,7 +321,7 @@ class CategoryView(View):
             "page_obj":page_obj,
         }
 
-        return render(request, "blog_app/category.html", context)
+        return render(request, "blog_app/category/category.html", context)
 
 class CategoryListView(View):
     paginate_by = 18
@@ -334,7 +334,7 @@ class CategoryListView(View):
             "page_obj": page_obj,
         }
 
-        return render(request, "blog_app/category_list.html", context)
+        return render(request, "blog_app/category/category_list.html", context)
      
 class CreateCategoryView(View):
     def get(self, request):
@@ -342,7 +342,7 @@ class CreateCategoryView(View):
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
 
-        return render(request, "blog_app/category_create.html")
+        return render(request, "blog_app/category/category_create.html")
 
     def post(self, request):
             # Vérifier connexion utilisateur
@@ -354,11 +354,11 @@ class CreateCategoryView(View):
             if not category_name:
                     
                     messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
-                    return render(request,"blog_app/category_create.html",context)
+                    return render(request,"blog_app/category/category_create.html",context)
              # verifier si categorie existe deja
             if Category.objects.filter(name=category_name).exists():
                 messages.error(request, "Une catégorie avec ce nom existe déjà")
-                return render(request, "blog_app/category_create.html", context)
+                return render(request, "blog_app/category/category_create.html", context)
             category = Category.objects.create(name=category_name)
             messages.success(request,"Catégorie créée avec succès")
             return redirect("category", id=category.id)
@@ -379,7 +379,7 @@ class DeleteCategoryView(View):
             return redirect("category_list")
         
         context = {  "category": category }
-        return render(request, "blog_app/category_delete.html", context)
+        return render(request, "blog_app/category/category_delete.html", context)
     def post(self, request, id):
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
