@@ -1,116 +1,126 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic.base import View
+
 from django.core.paginator import Paginator
 from ..models import Category, Post
 from ..forms import CategoryForm
 from django.conf import settings
-class CategoryView(View):
+
+from django.utils import timezone
+
+from django.views.generic.base import View
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+class CategoryView(DetailView):
+    model = Category
+    template_name = "blog_app/category/category.html"
     paginate_by = 6
-    def get(self, request, id):
-        try:
-            category = Category.objects.get(id=id)
-        except Category.DoesNotExist:
-            messages.error(request, "La catégorie n'existe pas")
-            return redirect("category_list")
-        
-        posts = category.posts.all().order_by("-createAt")
-        paginator = Paginator(posts, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get("page"))
-        context = {
-            "category": category,
-            "page_obj":page_obj,
-        }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["now"] = timezone.now()
+        return context
 
-        return render(request, "blog_app/category/category.html", context)
-
-class CategoryListView(View):
+class CategoryListView(ListView):
+    model = Category
     paginate_by = 18
-    def get(self, request):
-        categories = Category.objects.all()
-        paginator = Paginator(categories, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get("page"))
-
-        context = {
-            "page_obj": page_obj,
-        }
-
-        return render(request, "blog_app/category/category_list.html", context)
-     
+    template_name = "blog_app/category/category_list.html"
+    ordering = ["name"]
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["now"] = timezone.now()
+        return context
 
 class CategoryEditView(View):
+    model = Category
+    template_name = "blog_app/category/category_edit.html"
+    form_class = CategoryForm
+    fields = ["name"]
     def get(self, request, id):
-        # Vérifier connexion utilisateur
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-        
+
         try:
             category = Category.objects.get(id=id)
+
         except Category.DoesNotExist:
             messages.error(request,"La catégorie n'existe pas")
             return redirect("category_list")
-        
+
+        form = CategoryForm(instance=category)
 
         context = {
+            "form": form,
             "category": category,
+            "action_text": "Enregistrer",
         }
 
-        return render(request, "blog_app/category/category_edit.html", context)
+        return render(
+            request,
+            "blog_app/category/category_edit.html",
+            context
+        )
 
     def post(self, request, id):
-                # Vérifier connexion utilisateur
-                if not request.user.is_authenticated:
-                    return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-                
-                try:
-                    category = Category.objects.get(id=id)
-                except Category.DoesNotExist:
-                     messages.error(request,"La catégorie n'existe pas")
-                     return redirect("category_list")
-                
-                category_name = request.POST.get("category_name", "").strip()
-                context =  {"category_name": category_name,"category": category,}
-                if not category_name:
-                        
-                        messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
-                        return render(request,"blog_app/category/category_edit.html",context)
-                # verifier si categorie existe deja
-                if Category.objects.filter(name=category_name).exists():
-                    messages.error(request, "Une catégorie avec ce nom existe déjà")
-                    return render(request, "blog_app/category/category_edit.html", context)
-               
-                category.name = category_name
-                category.save()
-                messages.success(request,"Catégorie modifiée avec succès")
-                return redirect("category", id=category.id)
+
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+
+        try:
+            category = Category.objects.get(id=id)
+
+        except Category.DoesNotExist:
+            messages.error(request, "La catégorie n'existe pas")
+            return redirect("category_list")
+
+        
+        form = CategoryForm( request.POST,instance=category)
+
+        if form.is_valid():
+            category = form.save()
+
+            messages.success(request,f'Catégorie "{category.name}" modifiée avec succès.')
+
+            return redirect("category",id=category.id)
+
+        context = {
+            "form": form,
+            "category": category,
+            "action_text": "Enregistrer",
+        }
+
+        return render(request,"blog_app/category/category_edit.html",context)
 
 class CreateCategoryView(View):
     def get(self, request):
         # Vérifier connexion utilisateur
         if not request.user.is_authenticated:
             return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-
-        return render(request, "blog_app/category/category_create.html")
+        
+        form = CategoryForm()
+        context = {
+            "form": form,
+        }
+        return render(request, "blog_app/category/category_create.html", context)
 
     def post(self, request):
             # Vérifier connexion utilisateur
             if not request.user.is_authenticated:
                 return redirect(f"{settings.LOGIN_URL}?next={request.path}")
             
-            category_name = request.POST.get("category_name", "").strip()
-            context =  {"category_name": category_name, }
-            if not category_name:
-                    
-                    messages.error(request,"Le nom de la nouvelle catégorie est obligatoire")
-                    return render(request,"blog_app/category/category_create.html",context)
-             # verifier si categorie existe deja
-            if Category.objects.filter(name=category_name).exists():
-                messages.error(request, "Une catégorie avec ce nom existe déjà")
-                return render(request, "blog_app/category/category_create.html", context)
-            category = Category.objects.create(name=category_name)
-            messages.success(request,"Catégorie créée avec succès")
-            return redirect("category", id=category.id)
+            form = CategoryForm(request.POST)
+            
+            if form.is_valid():
+                name = form.cleaned_data["name"]
+                category = form.save()
+                messages.success(request, f"Catérorie \"{name}\" ajoutée avec succès.")
+                return redirect("category", id=category.id)
+
+            context = {
+            'action_text': 'Ajouter',
+            'form': form
+            }
+            return render(request, "blog_app/category/category_create.html", context)
         
 class DeleteCategoryView(View):
     def get(self, request,id):

@@ -182,9 +182,6 @@ class DeletePostView(View):
             messages.error(request, "Vous ne pouvez modifier que vos propres posts")
             return redirect("profile")
 
-        if post.image:
-            post.image.delete(save=False)
-
         post.delete()
         messages.success(request, "Le post a été supprimé.")
         return redirect("profile")

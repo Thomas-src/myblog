@@ -4,15 +4,19 @@ from django.core.exceptions import ValidationError
 from .models import Category, Post
 
 class CategoryForm(forms.ModelForm):
-  template_name = "demo_app/snippets/form_snippet.html"
+  template_name = "blog_app/snippets/form_snippet.html"
 
   class Meta:
     model = Category
     fields = "__all__"
     #fields = ['name']
     widgets = {
-      'name': forms.TextInput(attrs={'class': 'form-control'}),
-    }
+            "name": forms.TextInput(
+                attrs={
+                    "class": "w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500"
+                }
+            ),
+        }
   
   def clean_name(self):
     name = self.cleaned_data['name']
@@ -30,7 +34,7 @@ class CategoryForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
-  template_name = "demo_app/snippets/form_snippet.html"
+  template_name = "blog_app/snippets/form_snippet.html"
   
   class Meta:
     model = Post

@@ -1,59 +1,89 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html, format_html_join
-from django.utils.safestring import mark_safe
+
 from .models import Category, Post
-
-# Register your models here.
-
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["name", "view_products_link"]
-    ordering = ['name',]
-    readonly_fields = ("products_list",)
-    search_fields = ["name","products_list"]
-    def products_list(self, obj):
+    list_display = ["name", "view_posts_link"]
+    ordering = ["name"]
+    readonly_fields = ["posts_list"]
+    search_fields = ["name", "posts__title"]
+
+    @admin.display(description="Publications associées")
+    def posts_list(self, obj):
         if not obj.pk:
             return "-"
-        
-        products = obj.products.all()
-        if not products:
-            product_links = "Aucun produit associé"
-        else:
-            product_links = format_html_join(
-                mark_safe("<br>"),
+
+        posts = obj.posts.all()
+        if posts:
+            post_links = format_html_join(
+                format_html("<br>"),
                 '<a href="{}">{}</a>',
                 (
-                    (
-                        reverse("admin:demo_app_product_change", args=[p.pk]),
-                        p.name,
-                    )
-                    for p in products
-                )
+                    (reverse("admin:blog_app_post_change", args=[p.pk]), p.title)
+                    for p in posts
+                ),
             )
+        else:
+            post_links = "Aucune publication associée"
 
-        # Lien pour ajouter un produit avec la catégorie pré-remplie
-        add_url = (reverse("admin:demo_app_product_add")+ f"?category={obj.pk}")
-        add_link = format_html( '<br><br><a class="addlink" href="{}">Ajouter un produit</a>',add_url)
+        # Lien pour ajouter une publication avec la catégorie pré-remplie
+        add_url = reverse("admin:blog_app_post_add") + f"?categories={obj.pk}"
+        add_link = format_html(
+            '<br><br><a class="addlink" href="{}">Ajouter une publication</a>', add_url
+        )
 
-        return format_html("{}{}", product_links, add_link)
+        return format_html("{}{}", post_links, add_link)
 
-    products_list.short_description = "Produits associés"
-
-    def view_products_link(self, obj):
-        url = (reverse("admin:demo_app_product_changelist")+ f"?category__id__exact={obj.id}")
-        return format_html('<a href="{}">Voir les produits</a>', url)
-
-    view_products_link.short_description = "Produits associés"
-
+    @admin.display(description="Publications")
+    def view_posts_link(self, obj):
+        url = (
+            reverse("admin:blog_app_post_changelist")
+            + f"?categories__id__exact={obj.pk}"
+        )
+        return format_html('<a href="{}">Voir les publications</a>', url)
 
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title','description','image','createAt', 'creator',]
-    list_filter = ['categories','creator',]
-    ordering = ['createAt',]
-    readonly_fields = ['id']
-    search_fields = ['id', 'name', 'title','description',]
+    list_display = [
+        "title_with_image",
+        "description",
+        "image_preview",
+        "createAt",
+        "creator",
+    ]
+    list_filter = ["categories", "creator"]
+    ordering = ["createAt"]
+    readonly_fields = ["createAt"]
+    search_fields = ["title", "description"]
+
+    @admin.display(description="Titre")
+    def title_with_image(self, obj):
+        if obj.image:
+            return format_html(
+                '<span style="display:flex; align-items:center;">'
+                '<img src="{}" style="max-width:32px; margin-right:6px;" />'
+                "{}"
+                "</span>",
+                obj.image.url,
+                obj.title,
+            )
+        return obj.title
+
+    @admin.display(description="Image")
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="max-width:200px" />', obj.image.url
+            )
+        return ""
+
+    def get_readonly_fields(self, request, obj=None):
+        # N'affiche la prévisualisation que lors de la modification
+        if obj:
+            return [*self.readonly_fields, "image_preview"]
+        return self.readonly_fields
