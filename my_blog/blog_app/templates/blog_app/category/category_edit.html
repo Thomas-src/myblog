@@ -13,10 +13,10 @@ Modification de la catégorie {{ category.name }}
         <span class="text-gray-500">{{ category.name }}</span>
     </h1>
 
-    <form method="post" action="{% url 'category_edit' id=category.id %}" class="space-y-5">
+    <form method="post" action="{% url 'category_edit' pk=category.pk %}" class="space-y-5">
         {% csrf_token %}
 
-        {{ form }}
+        {% include "blog_app/snippets/form_snippet.html" with action_text="Modifier" %}
 
     </form>
 

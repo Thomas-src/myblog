@@ -14,10 +14,10 @@
         </p>
     </div>
 
-    <form method="post" action="{% url 'category_delete' id=category.id %}" id="delete-form" class="flex gap-3">
+    <form method="post" action="{% url 'category_delete' pk=category.pk %}" id="delete-form" class="flex gap-3">
         {% csrf_token %}
 
-        <a href="{% url 'category' id=category.id %}"
+        <a href="{% url 'category' pk=category.pk %}"
             class="w-full border border-gray-300 px-4 py-2 text-center text-sm text-gray-700 transition-colors hover:bg-gray-100">
             Annuler
         </a>

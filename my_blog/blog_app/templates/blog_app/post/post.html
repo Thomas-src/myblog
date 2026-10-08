@@ -17,7 +17,7 @@
   <header class="mb-8">
     <div class="mb-4 flex flex-wrap items-center gap-3">
       {% for category in post_categories %}
-      <a href="{% url 'category' id=category.id %}"
+      <a href="{% url 'category' pk=category.pk %}"
         class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 transition hover:bg-gray-200">
         {{ category.name }}
       </a>

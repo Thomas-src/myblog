@@ -34,7 +34,7 @@
            transition-all duration-300 hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg">
 
     <div class="flex items-center justify-between gap-4">
-      <a href="{% url 'category' id=category.id %}" class="flex min-w-0 flex-1 items-center gap-4">
+      <a href="{% url 'category' pk=category.pk %}" class="flex min-w-0 flex-1 items-center gap-4">
         <div class="min-w-0">
           <p class="truncate text-sm font-semibold text-gray-900">
             {{ category.name }}
@@ -43,7 +43,7 @@
       </a>
 
       <div class="flex shrink-0 items-center gap-2">
-        <a href="{% url 'category_edit' id=category.id %}" title="Modifier la catégorie"
+        <a href="{% url 'category_edit' pk=category.pk %}" title="Modifier la catégorie"
           aria-label="Modifier la catégorie" class="inline-flex h-9 w-9 items-center justify-center rounded-xl
                  border border-gray-200 bg-white text-gray-500
                  transition-all duration-200
@@ -51,7 +51,7 @@
           <i class="fa-solid fa-pen text-xs"></i>
         </a>
 
-        <a href="{% url 'category_delete' id=category.id %}" title="Supprimer la catégorie" aria-label="Supprimer la catégorie"
+        <a href="{% url 'category_delete' pk=category.pk %}" title="Supprimer la catégorie" aria-label="Supprimer la catégorie"
                         class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-500 transition hover:border-red-500 hover:bg-red-500 hover:text-white">
                         <i class="fa-solid fa-trash text-sm"></i>
                     </a>
