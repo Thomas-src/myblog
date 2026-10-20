@@ -59,4 +59,4 @@ class EditUserProfileView(View):
             user = User.objects.get(id=request.user.id)
         except User.DoesNotExist:
             return redirect("index")
-        return render(request, "blog_app/user/edit-profile.html", context)
+        return render(request, "blog_app/user/edit-profile.html")
