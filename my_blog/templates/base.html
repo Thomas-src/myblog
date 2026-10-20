@@ -101,27 +101,27 @@
 
           {% if page_obj.has_previous %}
           <a href="?page=1" class="text-blue-600 font-bold underline hover:text-blue-800">
-            &laquo; first
+            &laquo;
           </a>
 
           <a href="?page={{ page_obj.previous_page_number }}"
             class="text-blue-600 font-bold underline hover:text-blue-800">
-            previous
+            Avant
           </a>
           {% endif %}
 
           <span class="font-bold text-gray-700">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
           </span>
 
           {% if page_obj.has_next %}
           <a href="?page={{ page_obj.next_page_number }}" class="text-blue-600 font-bold underline hover:text-blue-800">
-            next
+            Suivant
           </a>
 
           <a href="?page={{ page_obj.paginator.num_pages }}"
             class="text-blue-600 font-bold underline hover:text-blue-800">
-            last &raquo;
+            &raquo;
           </a>
           {% endif %}
 

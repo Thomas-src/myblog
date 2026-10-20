@@ -11,7 +11,7 @@ from django.utils import timezone
 from ..forms import PostForm
 class PostListView(ListView):
     model = Post
-    paginate_by = 18
+    paginate_by = 6
     template_name = "blog_app/post/post_list.html"
     ordering = ["-createAt"]
     def get_context_data(self, **kwargs):
