@@ -34,6 +34,7 @@
           <li><a href="{% url 'category_list' %}" class="hover:text-gray-950 transition-colors">Catégories</a></li>
           {% if user.is_authenticated %}
           <li><a href="{% url 'profile' %}" class="hover:text-gray-950 transition-colors">Profil</a></li>
+          <li><a href="{% url 'edit_profile' %}" class="hover:text-gray-950 transition-colors">Modifier mon profil</a></li>
           <li class="nav-item">
             <form method="post" action="{% url 'logout' %}" class="space-y-5">
               {% csrf_token %}
@@ -135,7 +136,17 @@
 
   <!-- Footer -->
   <footer class="border-t border-gray-100">
-    <div class="max-w-4xl mx-auto px-6 py-8 text-center text-sm text-gray-400">
+    <div class="max-w-4xl mx-auto px-6 py-6">
+      <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-400">
+        {% for category in all_categories %}
+        <a href="{% url 'category' pk=category.pk %}" class="transition-colors duration-200 hover:text-gray-900">
+          {{ category.name }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-6 py-4 text-center text-sm text-gray-400">
       <p>&copy; Thomas Derdeyn 2026</p>
     </div>
   </footer>

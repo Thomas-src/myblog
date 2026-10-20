@@ -48,3 +48,15 @@ class UserProfileView(View):
         }
 
         return render(request, "blog_app/user/profile.html", context)
+
+class EditUserProfileView(View):
+    
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+        
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return redirect("index")
+        return render(request, "blog_app/user/edit-profile.html", context)
