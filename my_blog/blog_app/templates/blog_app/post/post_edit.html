@@ -14,7 +14,7 @@
     <p class="mb-4 text-sm text-red-600">{{ error }}</p>
     {% endif %}
 
-    <form method="post" action="{% url 'post_edit' id=post.id %}" enctype="multipart/form-data" class="space-y-5">
+    <form method="post" action="{% url 'post_edit' pk=post.pk %}" enctype="multipart/form-data" class="space-y-5">
         {% csrf_token %}
 
         <div>
@@ -59,7 +59,7 @@
     </div>
 
         <div class="flex gap-3">
-            <a href="{% url 'post' id=post.id %}"
+            <a href="{% url 'post' pk=post.pk %}"
                 class="w-full border border-gray-300 px-4 py-2 text-sm text-gray-700 text-center hover:bg-gray-100 transition-colors">
                 Annuler
             </a>

@@ -9,7 +9,6 @@ from django.conf import settings
 
 from django.utils import timezone
 
-from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -64,7 +63,7 @@ class CreateCategoryView(PermissionRequiredMixin,CreateView):
         messages.success(self.request,f'Catégorie "{category.name}" créée avec succès.')
 
         return redirect("category", pk=category.pk)
-        
+
 class DeleteCategoryView(PermissionRequiredMixin,DeleteView):
     permission_required = "blog_app.delete_category"
     model = Category

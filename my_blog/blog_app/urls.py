@@ -5,10 +5,10 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name="index"),
 
     path('post/list/', views.PostListView.as_view(), name="post_list"),
-    path('post/<int:id>/', views.PostView.as_view(), name="post"),
+    path('post/<int:pk>/', views.PostView.as_view(), name="post"),
     path('post/create/', views.CreatePostView.as_view(), name="post_create"),
-    path('post/edit/<int:id>/', views.EditPostView.as_view(), name="post_edit"),
-    path('post/delete/<int:id>/', views.DeletePostView.as_view(), name='post_delete'),
+    path('post/edit/<int:pk>/', views.EditPostView.as_view(), name="post_edit"),
+    path('post/delete/<int:pk>/', views.DeletePostView.as_view(), name='post_delete'),
 
     path('category/list/', views.CategoryListView.as_view(), name="category_list"),
     path('category/<int:pk>/', views.CategoryView.as_view(), name="category"),

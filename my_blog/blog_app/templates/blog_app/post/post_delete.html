@@ -50,10 +50,10 @@
         Cette action est irréversible. Le post et son image seront définitivement supprimés.
     </p>
 
-    <form method="post" action="{% url 'post_delete' id=post.id %}" id="delete-form" class="flex gap-3">
+    <form method="post" action="{% url 'post_delete' pk=post.pk %}" id="delete-form" class="flex gap-3">
         {% csrf_token %}
 
-        <a href="{% url 'post' id=post.id %}"
+        <a href="{% url 'post' pk=post.pk %}"
             class="w-full border border-gray-300 px-4 py-2 text-center text-sm text-gray-700 transition-colors hover:bg-gray-100">
             Annuler
         </a>

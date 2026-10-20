@@ -1,41 +1,57 @@
-from django.views.generic.base import View
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.paginator import Paginator
 from ..models import Category, Post
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+from django.views.generic.base import View
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.utils import timezone
+from ..forms import PostForm
+class PostListView(ListView):
+    model = Post
+    paginate_by = 18
+    template_name = "blog_app/post/post_list.html"
+    ordering = ["-createAt"]
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["now"] = timezone.now()
+        return context
 
-class PostListView(View):
-    paginate_by = 6
-    def get(self, request):
-      
-        try:
-            posts = Post.objects.all().order_by("-createAt")
-        except Post.DoesNotExist:
-            posts = None
-        paginator = Paginator(posts, self.paginate_by)
-        page_obj = paginator.get_page(request.GET.get("page"))
-        context = {
-            "page_obj": page_obj,
-        }
+class PostView(DetailView):
+    model = Post
+    template_name = "blog_app/post/post.html"
+    def get_context_data(self, **kwargs):
+        post = self.object
+        context = super().get_context_data(**kwargs)
+        context["post"] = post
+        context["post_categories"] = post.categories.all().order_by("-id")
+        return context
 
-        return render(request, "blog_app/post/post_list.html", context)
-    
-class PostView(View):
-    def get(self, request, id):
-        try:
-            post = Post.objects.get(id=id)
-        except Post.DoesNotExist:
-            messages.error(request, "Le poste n'existe pas")
-            return redirect("post_list")
-        
-        context = {
-            "post": post,
-            "post_categories" : post.categories.all().order_by("-id")
-        }
+class CreatePostView(PermissionRequiredMixin, CreateView):
+    permission_required = "blog_app.add_post"
+    model = Post
+    form_class = PostForm
+    template_name = "blog_app/post/post_create.html"
 
-        return render(request, "blog_app/post/post.html", context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        context["action_text"] = "Créer"
+        return context
 
-class CreatePostView(View):
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        response = super().form_valid(form)
+        messages.success(self.request,"Le post a été créé avec succès.")
+        return redirect("post", pk=self.object.pk)
+
+
+
+class CreatePostView(PermissionRequiredMixin,View):
+    permission_required = "blog_app.add_post"
+    model = Post
     def get(self, request):
         # Vérifier connexion utilisateur
         if not request.user.is_authenticated:
@@ -91,97 +107,51 @@ class CreatePostView(View):
             post.categories.set(category_ids)
 
         messages.success(request,"Le post a été créé avec succès")
-        return redirect("post", id=post.id)
+        return redirect("post", pk=post.pk)
 
-class EditPostView(View):
-     def get(self, request,id):
-            # Vérifier connexion utilisateur
-            try:
-                post = Post.objects.get(id=id)
-            except Post.DoesNotExist:
-                messages.error(request,"Le post n'existe pas")
-                return redirect("profile")
 
-            if post.creator != request.user:
-                messages.error(request, "Vous ne pouvez modifier que vos propres posts")
-                return redirect("profile")
-
-            context = {  "post": post,
-                       "categories": Category.objects.all(),
-                       "selected_ids": list(post.categories.values_list("id", flat=True)), }
-            
-            return render(request, "blog_app/post/post_edit.html", context)
-    
-     def post(self, request,id):
-            if not request.user.is_authenticated:
-                return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-
-            try:
-                post = Post.objects.get(id=id)
-            except Post.DoesNotExist:
-                messages.error(request,"Le post n'existe pas")
-                return redirect("profile")
-          
-            if post.creator != request.user:
-                messages.error(request, "Vous ne pouvez modifier que vos propres posts")
-                return redirect("profile")
-
-            title = request.POST.get("title", "").strip()
-            description = request.POST.get("description", "").strip()
-            image = request.FILES.get("image")
-            category_ids = request.POST.getlist("categories")
-
-            if not title or not description:
-                messages.success(request,"Le titre et la description sont obligatoire")
-                context = {
-                "post": post,
-                "categories": Category.objects.all(),
-                "form": {"title": title, "description": description},
-                "selected_ids": list(post.categories.values_list("id", flat=True)),
-                }
-                return render(request, "blog_app/post/post_edit.html", context)
-            post.title = title
-            post.description = description
-
-            if image:
-                if post.image:
-                        post.image.delete(save=False)
-                post.image = image
-
-            post.save()
-            post.categories.set(category_ids)
-            messages.success(request,"Le post a été modifié avec succès")
-            return redirect("post", id=post.id)
-
-class DeletePostView(View):
-    def get(self, request,id):
-        if not request.user.is_authenticated:
-            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-        try:
-            post = Post.objects.get(id=id)
-        except Post.DoesNotExist:
-            messages.error(request,"Le post n'existe pas")
-            return redirect("profile")
-
-        if post.creator != request.user:
-            messages.error(request, "Vous ne pouvez modifier que vos propres posts")
+class EditPostView(PermissionRequiredMixin,UpdateView):
+    permission_required = "blog_app.change_post"
+    model = Post
+    template_name = "blog_app/post/post_edit.html"
+    form_class = PostForm
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        context["selected_ids"] = list(self.object.categories.values_list("id", flat=True))
+        context["action_text"] = "Modifier"
+        return context
+    def form_valid(self, form):
+        post = self.object
+        
+        if post.creator != self.request.user:
+            messages.error(self.request, "Vous ne pouvez modifier que vos propres posts")
             return redirect("profile")
         
-        context = {  "post": post }
-        return render(request, "blog_app/post/post_delete.html", context)
-    def post(self, request, id):
-        if not request.user.is_authenticated:
-            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-        try:
-            post = Post.objects.get(id=id)
-        except Post.DoesNotExist:
-            messages.error(request,"Le post n'existe pas")
-            return redirect("profile")
-        
-        if post.creator != request.user:
-            messages.error(request, "Vous ne pouvez modifier que vos propres posts")
-            return redirect("profile")
+        category = form.save()
+        messages.success(self.request,f'Post "{category.pk}" modifié avec succès.')
+
+        return redirect("post", pk=category.pk)
+
+
+class DeletePostView(PermissionRequiredMixin,DeleteView):
+    permission_required = "blog_app.delete_post"
+    model = Post
+    template_name = "blog_app/post/post_delete.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["action_text"] = "Supprimer"
+        return context
+    def form_valid(self, form):
+        post = self.object
+
+        # Uniquement le groupe admin peut le poste désormais
+        # if post.creator != self.request.user:
+        #    messages.error(self.request, "Vous ne pouvez modifier que vos propres posts")
+        #    return redirect("profile")
 
         post.delete()
-        messages.success(request, "Le post a été supprimé.")
+
+        messages.success(self.request,"Le post a été supprimé.")
+
         return redirect("profile")

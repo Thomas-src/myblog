@@ -1,47 +1,116 @@
+
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Créer un post{% endblock %}
 
 {% block content %}
-{% load static %}
 
 <div class="max-w-xl mx-auto px-4 py-10">
-    <h2 class="text-xl font-semibold text-gray-900 mb-6">Créer votre post</h2>
+    <h2 class="text-xl font-semibold text-gray-900 mb-6">
+        Créer votre post
+    </h2>
 
-    <form method="post" action="{% url 'post_create' %}" enctype="multipart/form-data" class="space-y-5" >
+    <form method="post"
+          action="{% url 'post_create' %}"
+          enctype="multipart/form-data"
+          class="space-y-5">
+
         {% csrf_token %}
 
-        <div>
-            <label for="title_post" class="block text-sm text-gray-700 mb-1">Titre du post*</label>
-            <input required type="text" name="title" id="title_post" value="{{form.title}}" class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">
-        </div>
+        {% if form.non_field_errors %}
+            <div class="text-sm text-red-600">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
 
         <div>
-            <label for="description" class="block text-sm text-gray-700 mb-1">Description*</label>
-            <textarea required name="description" placeholder="Description" id="description" rows="5" class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">{{form.description}}</textarea>
-        </div>
-
-        <div>
-            <label for="image" class="block text-sm text-gray-700 mb-1">Lien image</label>
-        <input type="file" accept="image/*" capture="camera" name="image" id="image" value="{{form.image}}" class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">
-        </div>
-
-         <div class="flex flex-wrap gap-2">
-            {% for category in categories %}
-            <label class="cursor-pointer">
-                <input type="checkbox" name="categories" value="{{ category.id }}" class="peer sr-only"
-                {% if  category.id in selected_ids %}checked{% endif %}>
-                <span class="inline-block border border-gray-300 px-3 py-1 text-sm bg-white
-             peer-checked:bg-gray-900 peer-checked:text-white peer-checked:border-gray-900
-             peer-focus-visible:ring-2 peer-focus-visible:ring-gray-400">
-                    {{ category.name }}
-                </span>
+            <label for="id_title"
+                   class="block text-sm text-gray-700 mb-1">
+                Titre du post*
             </label>
-            {% empty %}
-            <p class="text-sm text-gray-500">Aucune catégorie</p>
+
+            <input required
+                   type="text"
+                   name="title"
+                   id="id_title"
+                   maxlength="50"
+                   value="{{ form.title.value|default_if_none:'' }}"
+                   class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">
+
+            {% for error in form.title.errors %}
+                <p class="text-sm text-red-600">{{ error }}</p>
             {% endfor %}
         </div>
 
-        <input type="submit" value="Publier" class="w-full border border-gray-900 px-4 py-2 text-sm text-gray-900 hover:bg-gray-900 hover:text-white transition-colors cursor-pointer">
+        <div>
+            <label for="id_description"
+                   class="block text-sm text-gray-700 mb-1">
+                Description*
+            </label>
+
+            <textarea required
+                      name="description"
+                      id="id_description"
+                      placeholder="Description"
+                      rows="5"
+                      maxlength="500"
+                      class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">{{ form.description.value|default_if_none:'' }}</textarea>
+
+            {% for error in form.description.errors %}
+                <p class="text-sm text-red-600">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div>
+            <label for="id_image"
+                   class="block text-sm text-gray-700 mb-1">
+                Image
+            </label>
+
+            <input type="file"
+                   accept="image/*"
+                   name="image"
+                   id="id_image"
+                   class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">
+
+            {% for error in form.image.errors %}
+                <p class="text-sm text-red-600">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div>
+            <p class="text-sm text-gray-700 mb-2">Catégories</p>
+
+            <div class="flex flex-wrap gap-2">
+                {% for category in categories %}
+                    <label class="cursor-pointer">
+                        <input type="checkbox"
+                               name="categories"
+                               value="{{ category.pk }}"
+                               class="peer sr-only"
+                               {% if category.pk in form.categories.value %}checked{% endif %}>
+
+                        <span class="inline-block border border-gray-300 px-3 py-1 text-sm bg-white
+                                     peer-checked:bg-gray-900 peer-checked:text-white peer-checked:border-gray-900
+                                     peer-focus-visible:ring-2 peer-focus-visible:ring-gray-400">
+                            {{ category.name }}
+                        </span>
+                    </label>
+                {% empty %}
+                    <p class="text-sm text-gray-500">Aucune catégorie</p>
+                {% endfor %}
+            </div>
+
+            {% for error in form.categories.errors %}
+                <p class="text-sm text-red-600">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <button type="submit"
+                class="w-full border border-gray-900 px-4 py-2 text-sm text-gray-900 hover:bg-gray-900 hover:text-white transition-colors cursor-pointer">
+            {{ action_text | default:"Créer le post" }}
+        </button>
     </form>
 </div>
 
