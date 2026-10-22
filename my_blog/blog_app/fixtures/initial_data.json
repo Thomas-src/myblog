@@ -1,0 +1,411 @@
+[
+{
+  "model": "blog_app.category",
+  "pk": 4,
+  "fields": {
+    "name": "Développement et Programmation",
+    "name_fr": "Développement et Programmation",
+    "name_en": "Development and programming"
+  }
+},
+{
+  "model": "blog_app.category",
+  "pk": 5,
+  "fields": {
+    "name": "Cybersécurité",
+    "name_fr": "Cybersécurité",
+    "name_en": "Cybersecurity"
+  }
+},
+{
+  "model": "blog_app.category",
+  "pk": 6,
+  "fields": {
+    "name": "Matériel et Logiciels",
+    "name_fr": "Matériel et Logiciels",
+    "name_en": "Materials and Software"
+  }
+},
+{
+  "model": "blog_app.category",
+  "pk": 7,
+  "fields": {
+    "name": "Réseaux et Cloud",
+    "name_fr": "Réseaux et Cloud",
+    "name_en": "Networks and Cloud"
+  }
+},
+{
+  "model": "blog_app.category",
+  "pk": 8,
+  "fields": {
+    "name": "Intelligence Artificielle et Nouvelles Technologie",
+    "name_fr": "Intelligence Artificielle et Nouvelles Technologie",
+    "name_en": "Intelligence Artificielle et New Technologies"
+  }
+},
+{
+  "model": "blog_app.category",
+  "pk": 9,
+  "fields": {
+    "name": "Astuces et Tutoriels",
+    "name_fr": "Astuces et Tutoriels",
+    "name_en": "Tips and Tutorials"
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "user",
+    "permissions": [
+      [
+        "add_category",
+        "blog_app",
+        "category"
+      ],
+      [
+        "view_category",
+        "blog_app",
+        "category"
+      ],
+      [
+        "add_post",
+        "blog_app",
+        "post"
+      ],
+      [
+        "change_post",
+        "blog_app",
+        "post"
+      ],
+      [
+        "view_post",
+        "blog_app",
+        "post"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "staff",
+    "permissions": [
+      [
+        "change_user",
+        "auth",
+        "user"
+      ],
+      [
+        "delete_user",
+        "auth",
+        "user"
+      ],
+      [
+        "view_user",
+        "auth",
+        "user"
+      ],
+      [
+        "add_category",
+        "blog_app",
+        "category"
+      ],
+      [
+        "change_category",
+        "blog_app",
+        "category"
+      ],
+      [
+        "delete_category",
+        "blog_app",
+        "category"
+      ],
+      [
+        "view_category",
+        "blog_app",
+        "category"
+      ],
+      [
+        "add_post",
+        "blog_app",
+        "post"
+      ],
+      [
+        "change_post",
+        "blog_app",
+        "post"
+      ],
+      [
+        "delete_post",
+        "blog_app",
+        "post"
+      ],
+      [
+        "view_post",
+        "blog_app",
+        "post"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$lcTIH3x9gBHaYspbD9xonv$7xEyciqvL8ZRZ+e3MwGx/tJWDzvSJJc+1n3c70t4Ac4=",
+    "last_login": "2026-10-20T15:13:49.077Z",
+    "is_superuser": true,
+    "username": "2634156",
+    "first_name": "",
+    "last_name": "",
+    "email": "derdeyn.thomas@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-24T18:58:30.214Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$CDRHkl6u5jZuejLVXHUPgH$FYuQ5oyUxqkTNm5jYG++SfIZREQpY+48Ky3/WlV9C/k=",
+    "last_login": "2026-10-20T15:04:41.125Z",
+    "is_superuser": false,
+    "username": "thomas",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-24T23:22:42Z",
+    "groups": [
+      [
+        "staff"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$CYUB5dhxlVnFVstORRD1dj$rfuRCUA/HeMGuZxNCXZjoyQzsnvW/w4bCubmvVd+vUk=",
+    "last_login": "2026-09-24T23:26:52.492Z",
+    "is_superuser": false,
+    "username": "qwerty",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-24T23:26:47.099Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$A0MgqUcj0OITllGQA6o48K$BkXgzXRP1J7UZjQYwUK06UbXWxeAOImndLHlHPRN5Yw=",
+    "last_login": "2026-10-20T15:13:21.574Z",
+    "is_superuser": false,
+    "username": "thomasse",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-20T15:13:19.497Z",
+    "groups": [
+      [
+        "user"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$GwdJH3oMsGyvhWOvtrM5Yl$sKySsJlOZo5egqLE5KR4jxCjE2KOPPZdALE9eiDcRDU=",
+    "last_login": "2026-10-20T15:15:35.888Z",
+    "is_superuser": false,
+    "username": "thomder",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-20T15:15:33.783Z",
+    "groups": [
+      [
+        "user"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 8,
+  "fields": {
+    "title": "Cybersécurité : 10 astuces simples pour protéger ses données en ligne",
+    "title_fr": "Cybersécurité : 10 astuces simples pour protéger ses données en ligne",
+    "title_en": null,
+    "description": "Découvrez les bonnes pratiques essentielles pour renforcer votre sécurité numérique : mots de passe robustes, authentification à deux facteurs, mises à jour, sauvegardes et protection contre le phishing. Un guide accessible pour mieux protéger vos comptes, vos appareils et vos données personnelles.",
+    "description_fr": "Découvrez les bonnes pratiques essentielles pour renforcer votre sécurité numérique : mots de passe robustes, authentification à deux facteurs, mises à jour, sauvegardes et protection contre le phishing. Un guide accessible pour mieux protéger vos comptes, vos appareils et vos données personnelles.",
+    "description_en": null,
+    "image": "images/images_3.jpg",
+    "createAt": "2026-09-24T23:06:08.952Z",
+    "creator": [
+      "2634156"
+    ],
+    "categories": [
+      5
+    ]
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 9,
+  "fields": {
+    "title": "Développement et IA : comment utiliser l’intelligence artificielle pour programmer plus efficacement",
+    "title_fr": "Développement et IA : comment utiliser l’intelligence artificielle pour programmer plus efficacement",
+    "title_en": null,
+    "description": "L’intelligence artificielle transforme les méthodes de développement logiciel. Découvrez comment les outils d’IA peuvent aider les développeurs à générer du code, détecter des erreurs, documenter leurs projets et automatiser certaines tâches, tout en conservant de bonnes pratiques de programmation.",
+    "description_fr": "L’intelligence artificielle transforme les méthodes de développement logiciel. Découvrez comment les outils d’IA peuvent aider les développeurs à générer du code, détecter des erreurs, documenter leurs projets et automatiser certaines tâches, tout en conservant de bonnes pratiques de programmation.",
+    "description_en": null,
+    "image": "images/images_2.jpg",
+    "createAt": "2026-09-24T23:06:26.695Z",
+    "creator": [
+      "2634156"
+    ],
+    "categories": [
+      4,
+      8
+    ]
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 10,
+  "fields": {
+    "title": "Comprendre les bases pour créer une infrastructure",
+    "title_fr": "Comprendre les bases pour créer une infrastructure",
+    "title_en": "Networks and Cloud: Understanding the basics for b",
+    "description": "Cloud computing, réseaux, stockage et services à distance sont devenus incontournables dans l’informatique moderne. Ce guide présente les concepts essentiels et explique comment choisir les bonnes solutions matérielles et logicielles pour mettre en place une infrastructure fiable, sécurisée et évolutive.",
+    "description_fr": "Cloud computing, réseaux, stockage et services à distance sont devenus incontournables dans l’informatique moderne. Ce guide présente les concepts essentiels et explique comment choisir les bonnes solutions matérielles et logicielles pour mettre en place une infrastructure fiable, sécurisée et évolutive.",
+    "description_en": "Cloud computing, networking, storage, and remote services have become essential in modern IT. This guide introduces key concepts and explains how to select the right hardware and software solutions to build a reliable, secure, and scalable infrastructure.",
+    "image": "images/images_1.jpg",
+    "createAt": "2026-09-24T23:06:41.800Z",
+    "creator": [
+      "2634156"
+    ],
+    "categories": [
+      7
+    ]
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 11,
+  "fields": {
+    "title": "Java : un langage de programmation incontournable",
+    "title_fr": "Java : un langage de programmation incontournable",
+    "title_en": null,
+    "description": "Java est un langage de programmation créé dans les années 1990 par Sun Microsystems. Il est devenu l’un des langages les plus utilisés dans le monde grâce à sa fiabilité, sa portabilité et sa polyvalence.\r\n\r\nL’un des principaux avantages de Java est son principe « écrire une fois, exécuter partout ». Grâce à la machine virtuelle Java (JVM), un programme peut fonctionner sur différents systèmes d’exploitation sans devoir être entièrement réécrit.\r\n\r\nJava est utilisé dans de nombreux domaines, notamment le développement d’applications mobiles, les logiciels d’entreprise, les serveurs web et certains systèmes embarqués. Il est également très présent dans l’enseignement de la programmation, car il permet d’apprendre des concepts importants comme les classes, les objets et l’héritage.\r\n\r\nMalgré l’apparition de nombreux nouveaux langages, Java demeure un outil important dans le domaine informatique. Sa grande communauté, ses nombreuses bibliothèques et son écosystème développé en font un langage encore largement utilisé aujourd’hui.\r\n\r\nEn conclusion, Java est un langage puissant et polyvalent qui a joué un rôle majeur dans l’évolution du développement logiciel. Il constitue encore aujourd’hui une compétence intéressante pour les personnes qui souhaitent apprendre la programmation ou travailler dans le domaine informatique.",
+    "description_fr": "Java est un langage de programmation créé dans les années 1990 par Sun Microsystems. Il est devenu l’un des langages les plus utilisés dans le monde grâce à sa fiabilité, sa portabilité et sa polyvalence.\r\n\r\nL’un des principaux avantages de Java est son principe « écrire une fois, exécuter partout ». Grâce à la machine virtuelle Java (JVM), un programme peut fonctionner sur différents systèmes d’exploitation sans devoir être entièrement réécrit.\r\n\r\nJava est utilisé dans de nombreux domaines, notamment le développement d’applications mobiles, les logiciels d’entreprise, les serveurs web et certains systèmes embarqués. Il est également très présent dans l’enseignement de la programmation, car il permet d’apprendre des concepts importants comme les classes, les objets et l’héritage.\r\n\r\nMalgré l’apparition de nombreux nouveaux langages, Java demeure un outil important dans le domaine informatique. Sa grande communauté, ses nombreuses bibliothèques et son écosystème développé en font un langage encore largement utilisé aujourd’hui.\r\n\r\nEn conclusion, Java est un langage puissant et polyvalent qui a joué un rôle majeur dans l’évolution du développement logiciel. Il constitue encore aujourd’hui une compétence intéressante pour les personnes qui souhaitent apprendre la programmation ou travailler dans le domaine informatique.",
+    "description_en": null,
+    "image": "images/images_4.jpg",
+    "createAt": "2026-09-24T23:23:49.047Z",
+    "creator": [
+      "thomas"
+    ],
+    "categories": [
+      4,
+      6
+    ]
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 12,
+  "fields": {
+    "title": "L’intelligence artificielle au quotidien",
+    "title_fr": "L’intelligence artificielle au quotidien",
+    "title_en": null,
+    "description": "L’intelligence artificielle, souvent appelée IA, occupe une place de plus en plus importante dans notre vie quotidienne. Elle permet à des machines et à des logiciels d’effectuer des tâches qui nécessitent habituellement l’intervention humaine, comme comprendre un texte, reconnaître une image ou répondre à une question.\r\n\r\nAujourd’hui, l’IA est présente dans de nombreux domaines. Les assistants virtuels peuvent répondre aux utilisateurs, les plateformes de streaming recommandent des films et des séries, tandis que certaines applications utilisent l’IA pour traduire des langues ou améliorer des photos.\r\n\r\nL’IA peut également être utile à l’école et au travail. Elle peut aider à rechercher des informations, expliquer des notions difficiles, corriger certains textes ou générer des idées. Cependant, il est important de vérifier les informations produites, car une IA peut parfois donner une réponse incorrecte.\r\n\r\nL’intelligence artificielle est donc un outil puissant qui transforme progressivement notre quotidien. Son utilisation demande toutefois de la prudence et un esprit critique.",
+    "description_fr": "L’intelligence artificielle, souvent appelée IA, occupe une place de plus en plus importante dans notre vie quotidienne. Elle permet à des machines et à des logiciels d’effectuer des tâches qui nécessitent habituellement l’intervention humaine, comme comprendre un texte, reconnaître une image ou répondre à une question.\r\n\r\nAujourd’hui, l’IA est présente dans de nombreux domaines. Les assistants virtuels peuvent répondre aux utilisateurs, les plateformes de streaming recommandent des films et des séries, tandis que certaines applications utilisent l’IA pour traduire des langues ou améliorer des photos.\r\n\r\nL’IA peut également être utile à l’école et au travail. Elle peut aider à rechercher des informations, expliquer des notions difficiles, corriger certains textes ou générer des idées. Cependant, il est important de vérifier les informations produites, car une IA peut parfois donner une réponse incorrecte.\r\n\r\nL’intelligence artificielle est donc un outil puissant qui transforme progressivement notre quotidien. Son utilisation demande toutefois de la prudence et un esprit critique.",
+    "description_en": null,
+    "image": "images/IA-Collab.png",
+    "createAt": "2026-09-24T23:27:43.639Z",
+    "creator": [
+      "qwerty"
+    ],
+    "categories": [
+      8
+    ]
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 13,
+  "fields": {
+    "title": "Les avantages et les limites de l’intelligence artificielle",
+    "title_fr": "Les avantages et les limites de l’intelligence artificielle",
+    "title_en": null,
+    "description": "L’intelligence artificielle offre de nombreuses possibilités. Elle peut traiter rapidement de grandes quantités d’informations et aider les humains dans différentes tâches. Dans le domaine médical, par exemple, certaines technologies peuvent contribuer à analyser des images médicales. Dans les entreprises, l’IA peut automatiser certaines tâches répétitives.\r\n\r\nCependant, cette technologie possède aussi des limites. Une IA ne comprend pas toujours les informations de la même manière qu’un être humain et peut produire des erreurs. Elle peut également reproduire des biais présents dans les données utilisées pour son fonctionnement.\r\n\r\nLa protection des données personnelles constitue également un enjeu important. Les utilisateurs doivent faire attention aux informations qu’ils transmettent à certains services utilisant l’IA.\r\n\r\nEnfin, l’arrivée de l’IA transforme certains métiers. Elle peut remplacer certaines tâches, mais elle peut aussi créer de nouvelles activités et modifier la manière dont les travailleurs accomplissent leur travail.\r\n\r\nL’IA présente donc à la fois des avantages et des défis. Son développement nécessite une utilisation responsable et une réflexion sur ses conséquences.",
+    "description_fr": "L’intelligence artificielle offre de nombreuses possibilités. Elle peut traiter rapidement de grandes quantités d’informations et aider les humains dans différentes tâches. Dans le domaine médical, par exemple, certaines technologies peuvent contribuer à analyser des images médicales. Dans les entreprises, l’IA peut automatiser certaines tâches répétitives.\r\n\r\nCependant, cette technologie possède aussi des limites. Une IA ne comprend pas toujours les informations de la même manière qu’un être humain et peut produire des erreurs. Elle peut également reproduire des biais présents dans les données utilisées pour son fonctionnement.\r\n\r\nLa protection des données personnelles constitue également un enjeu important. Les utilisateurs doivent faire attention aux informations qu’ils transmettent à certains services utilisant l’IA.\r\n\r\nEnfin, l’arrivée de l’IA transforme certains métiers. Elle peut remplacer certaines tâches, mais elle peut aussi créer de nouvelles activités et modifier la manière dont les travailleurs accomplissent leur travail.\r\n\r\nL’IA présente donc à la fois des avantages et des défis. Son développement nécessite une utilisation responsable et une réflexion sur ses conséquences.",
+    "description_en": null,
+    "image": "images/images_6.jpg",
+    "createAt": "2026-09-24T23:28:00.945Z",
+    "creator": [
+      "qwerty"
+    ],
+    "categories": [
+      8
+    ]
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 14,
+  "fields": {
+    "title": "Quel avenir pour l’intelligence artificielle ?",
+    "title_fr": "Quel avenir pour l’intelligence artificielle ?",
+    "title_en": null,
+    "description": "L’intelligence artificielle évolue rapidement et pourrait continuer à transformer de nombreux secteurs au cours des prochaines années. Les systèmes d’IA deviennent capables de comprendre et de produire différents types de contenus, notamment du texte, des images, du son et de la vidéo.\r\n\r\nDans l’éducation, l’IA pourrait permettre de proposer des exercices adaptés au niveau de chaque élève. Dans les sciences, elle peut aider les chercheurs à analyser de grandes quantités de données et à accélérer certaines recherches. Dans les entreprises, elle pourrait continuer à automatiser certaines tâches et à assister les employés.\r\n\r\nCette évolution soulève néanmoins plusieurs questions. Comment protéger les données personnelles ? Comment éviter les erreurs et les discriminations ? Comment adapter l’école et le monde du travail à ces nouvelles technologies ?\r\n\r\nL’avenir de l’IA dépendra donc autant des progrès technologiques que des décisions prises par les humains. L’objectif sera de développer des outils utiles tout en mettant en place des règles permettant de limiter leurs risques.",
+    "description_fr": "L’intelligence artificielle évolue rapidement et pourrait continuer à transformer de nombreux secteurs au cours des prochaines années. Les systèmes d’IA deviennent capables de comprendre et de produire différents types de contenus, notamment du texte, des images, du son et de la vidéo.\r\n\r\nDans l’éducation, l’IA pourrait permettre de proposer des exercices adaptés au niveau de chaque élève. Dans les sciences, elle peut aider les chercheurs à analyser de grandes quantités de données et à accélérer certaines recherches. Dans les entreprises, elle pourrait continuer à automatiser certaines tâches et à assister les employés.\r\n\r\nCette évolution soulève néanmoins plusieurs questions. Comment protéger les données personnelles ? Comment éviter les erreurs et les discriminations ? Comment adapter l’école et le monde du travail à ces nouvelles technologies ?\r\n\r\nL’avenir de l’IA dépendra donc autant des progrès technologiques que des décisions prises par les humains. L’objectif sera de développer des outils utiles tout en mettant en place des règles permettant de limiter leurs risques.",
+    "description_en": null,
+    "image": "",
+    "createAt": "2026-09-24T23:28:17.267Z",
+    "creator": [
+      "qwerty"
+    ],
+    "categories": [
+      8
+    ]
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 15,
+  "fields": {
+    "title": "PHP : un langage important du développement web",
+    "title_fr": "PHP : un langage important du développement web",
+    "title_en": null,
+    "description": "PHP est un langage de programmation principalement utilisé pour créer des sites et des applications web. Créé dans les années 1990, il est devenu un outil très répandu dans le développement de sites dynamiques.\r\n\r\nL’un des principaux avantages de PHP est qu’il permet de générer des pages web en fonction des actions des utilisateurs. Par exemple, lorsqu’une personne se connecte à un site, PHP peut vérifier ses informations et afficher une page personnalisée.\r\n\r\nPHP peut également communiquer avec des bases de données comme MySQL. Cela permet de stocker et de récupérer des informations telles que des comptes utilisateurs, des articles ou des produits. De nombreux systèmes de gestion de contenu utilisent ou ont utilisé PHP, notamment WordPress.\r\n\r\nLe langage est également accessible aux débutants. Sa syntaxe relativement simple permet de commencer rapidement à créer de petits programmes avant de passer à des projets plus complexes.\r\n\r\nMême si de nombreux autres langages et technologies sont apparus, PHP reste utilisé pour développer et maintenir de nombreux sites web. Il constitue donc une technologie importante à connaître pour les personnes qui souhaitent apprendre le développement web.",
+    "description_fr": "PHP est un langage de programmation principalement utilisé pour créer des sites et des applications web. Créé dans les années 1990, il est devenu un outil très répandu dans le développement de sites dynamiques.\r\n\r\nL’un des principaux avantages de PHP est qu’il permet de générer des pages web en fonction des actions des utilisateurs. Par exemple, lorsqu’une personne se connecte à un site, PHP peut vérifier ses informations et afficher une page personnalisée.\r\n\r\nPHP peut également communiquer avec des bases de données comme MySQL. Cela permet de stocker et de récupérer des informations telles que des comptes utilisateurs, des articles ou des produits. De nombreux systèmes de gestion de contenu utilisent ou ont utilisé PHP, notamment WordPress.\r\n\r\nLe langage est également accessible aux débutants. Sa syntaxe relativement simple permet de commencer rapidement à créer de petits programmes avant de passer à des projets plus complexes.\r\n\r\nMême si de nombreux autres langages et technologies sont apparus, PHP reste utilisé pour développer et maintenir de nombreux sites web. Il constitue donc une technologie importante à connaître pour les personnes qui souhaitent apprendre le développement web.",
+    "description_en": null,
+    "image": "images/images.png",
+    "createAt": "2026-09-24T23:29:05.602Z",
+    "creator": [
+      "qwerty"
+    ],
+    "categories": [
+      4
+    ]
+  }
+}
+]
