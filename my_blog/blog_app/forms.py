@@ -1,18 +1,26 @@
 from django import forms
+from django.contrib.auth import password_validation
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-
+from django.utils.translation import gettext_lazy as _
 from .models import Category, Post
+INPUT_CLASS = "w-full border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900"
 
 class CategoryForm(forms.ModelForm):
   template_name = "blog_app/snippets/form_snippet.html"
 
   class Meta:
     model = Category
-    fields = ['name']
+    fields = ['name_fr', 'name_en']
     widgets = {
-            "name": forms.TextInput(
+            "name_fr": forms.TextInput(
                 attrs={
-                    "class": "w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500"
+                    "class":INPUT_CLASS
+                }
+            ),
+             "name_en": forms.TextInput(
+                attrs={
+                    "class": INPUT_CLASS
                 }
             ),
         }
@@ -46,3 +54,56 @@ class PostForm(forms.ModelForm):
     }
 
  
+class EditUserProfileForm(forms.ModelForm):
+  old_password = forms.CharField(
+    label=_("Mot de passe actuel"),
+    widget=forms.PasswordInput(attrs={"class": INPUT_CLASS, "autocomplete": "current-password"}),
+  )
+  new_password1 = forms.CharField(
+    label=_("Nouveau mot de passe"),
+    required=False,
+    widget=forms.PasswordInput(attrs={"class": INPUT_CLASS, "autocomplete": "new-password"}),
+  )
+  new_password2 = forms.CharField(
+    label=_("Confirmation du nouveau mot de passe"),
+    required=False,
+    widget=forms.PasswordInput(attrs={"class": INPUT_CLASS, "autocomplete": "new-password"}),
+  )
+
+  class Meta:
+    model = User
+    fields = ["username"]
+    labels = {"username": _("Nom d'utilisateur")}
+    widgets = {
+      "username": forms.TextInput(attrs={"class": INPUT_CLASS, "autocomplete": "username"}),
+    }
+
+  def clean_old_password(self):
+    old_password = self.cleaned_data["old_password"]
+    if not self.instance.check_password(old_password):
+      raise ValidationError(_("Le mot de passe actuel est incorrect."))
+    return old_password
+
+  def clean(self):
+    cleaned = super().clean()
+    p1 = cleaned.get("new_password1")
+    p2 = cleaned.get("new_password2")
+
+    if p1 or p2:
+      if p1 != p2:
+        self.add_error("new_password2", _("Les deux mots de passe ne correspondent pas."))
+      else:
+        try:
+          password_validation.validate_password(p1, self.instance)
+        except ValidationError as e:
+          self.add_error("new_password1", e)
+    return cleaned
+
+  def save(self, commit=True):
+    user = super().save(commit=False)
+    new_password = self.cleaned_data.get("new_password1")
+    if new_password:
+      user.set_password(new_password)
+    if commit:
+      user.save()
+    return user

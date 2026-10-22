@@ -26,68 +26,34 @@
     <form method="post" class="space-y-5">
         {% csrf_token %}
 
-        {% if error %}
-        <div class="border border-red-200 bg-red-50 px-4 py-3">
-            <p class="text-sm text-red-600">
-                {{ error }}
-            </p>
-        </div>
-        {% endif %}
-
         <div>
             <label for="email" class="block mb-1 text-sm text-gray-700">
                 {% trans "E-mail" %}
             </label>
-
-            <input type="text" name="email" id="email" autocomplete="email" disabled class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900
-           focus:outline-none focus:border-gray-900
-           disabled:bg-gray-100 disabled:text-gray-500
-           disabled:cursor-not-allowed disabled:opacity-70" value="{{ user.email }}">
+            <input type="text" id="email" value="{{ user.email }}" disabled
+                class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed disabled:opacity-70">
         </div>
 
+        {% for field in form %}
         <div>
-            <label for="username" class="block mb-1 text-sm text-gray-700">
-                {% trans "Nom d'utilisateur" %}
+            <label for="{{ field.id_for_label }}" class="block mb-1 text-sm text-gray-700">
+                {{ field.label }}
             </label>
 
-            <input type="text" name="username" id="username" autocomplete="username" required
-                class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900"
-                value="{{ user.username }}">
+            {{ field }}
+
+            {% for error in field.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+            {% endfor %}
         </div>
-
-        <div>
-            <label for="old_password" class="block mb-1 text-sm text-gray-700">
-                {% trans "Mot de passe actuel" %}
-            </label>
-
-            <input type="password" name="old_password" id="old_password" autocomplete="current-password" required
-                class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
-        </div>
-
-        <div>
-            <label for="new_password1" class="block mb-1 text-sm text-gray-700">
-                {% trans "Nouveau mot de passe" %}
-            </label>
-
-            <input type="password" name="new_password1" id="new_password1" autocomplete="new-password" required
-                class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
-        </div>
-
-        <div>
-            <label for="new_password2" class="block mb-1 text-sm text-gray-700">
-                {% trans "Confirmation du nouveau mot de passe" %}
-            </label>
-
-            <input type="password" name="new_password2" id="new_password2" autocomplete="new-password" required
-                class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
-        </div>
+        {% endfor %}
 
         <input type="submit" value="{% trans 'Modifier votre profil' %}"
             class="w-full border border-gray-900 px-4 py-2 text-sm text-gray-900 hover:bg-gray-900 hover:text-white transition-colors cursor-pointer">
     </form>
 
     <div class="mt-4">
-        <a href="{% url 'index' %}"
+        <a href="{% url 'profile' %}"
             class="block w-full border border-gray-300 px-4 py-2 text-sm text-gray-700 text-center hover:bg-gray-100 transition-colors">
             {% trans "Annuler" %}
         </a>

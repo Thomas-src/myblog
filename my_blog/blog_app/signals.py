@@ -28,17 +28,15 @@ def post_pre_save(sender, instance, **kwargs):
 @receiver(post_save, sender=User)
 def ajouter_groupe_utilisateur(sender, instance, created, **kwargs):
     if created:
-      print(Group.objects.filter(name="user").exists())
       groupe, _ = Group.objects.get_or_create(name="user")
       instance.groups.add(groupe)
-      print(f"Groupe {groupe.name} ajouté à {instance.username}")
 
 # Traduction automaitque
 
 # Signal pour traduire automatiquement le nom d'une catégorie
-@receiver(pre_save, sender=Category)
-def category_pre_save_traduction(sender, instance, **kwargs):
-  auto_traduire(sender, instance, ("name",))
+# @receiver(pre_save, sender=Category)
+# def category_pre_save_traduction(sender, instance, **kwargs):
+#   auto_traduire(sender, instance, ("name",))
 
 
 # Signal pour traduire automatiquement le titre et la description d'un post

@@ -4,7 +4,7 @@ from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 from .models import Category, Post
 from modeltranslation.admin import TranslationAdmin
-
+from django.utils.translation import gettext_lazy as _
 
 @admin.register(Category)
 class CategoryAdmin(TranslationAdmin):
@@ -29,23 +29,21 @@ class CategoryAdmin(TranslationAdmin):
                 ),
             )
         else:
-            post_links = "Aucune publication associée"
+            post_links = _("Aucune publication associée")
 
         # Lien pour ajouter une publication avec la catégorie pré-remplie
         add_url = reverse("admin:blog_app_post_add") + f"?categories={obj.pk}"
-        add_link = format_html(
-            '<br><br><a class="addlink" href="{}">Ajouter une publication</a>', add_url
-        )
+        add_link = format_html('<br><br><a class="addlink" href="{}">{}</a>',add_url,_("Ajouter une publication"),)
 
         return format_html("{}{}", post_links, add_link)
 
-    @admin.display(description="Publications")
+    @admin.display(description=_("Publications"))
     def view_posts_link(self, obj):
         url = (
             reverse("admin:blog_app_post_changelist")
             + f"?categories__id__exact={obj.pk}"
         )
-        return format_html('<a href="{}">Voir les publications</a>', url)
+        return format_html('<a href="{}">{}</a>', url, _("Voir les publications"))
 
 
 @admin.register(Post)

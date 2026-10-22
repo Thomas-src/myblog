@@ -5,8 +5,12 @@ from django.views.generic.base import View
 from django.shortcuts import get_object_or_404, redirect, render
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.utils.translation import gettext as _
+from ..forms import EditUserProfileForm
+
 
 class UserView(View):
     paginate_by = 6
@@ -49,14 +53,18 @@ class UserProfileView(View):
 
         return render(request, "blog_app/user/profile.html", context)
 
-class EditUserProfileView(View):
-    
+class EditUserProfileView(LoginRequiredMixin, View):
+    template_name = "blog_app/user/edit-profile.html"
+
     def get(self, request):
-        if not request.user.is_authenticated:
-            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-        
-        try:
-            user = User.objects.get(id=request.user.id)
-        except User.DoesNotExist:
-            return redirect("index")
-        return render(request, "blog_app/user/edit-profile.html")
+        form = EditUserProfileForm(instance=request.user)
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = EditUserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, _("Votre profil a été mis à jour."))
+            return redirect("profile")
+        return render(request, self.template_name, {"form": form})
