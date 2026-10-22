@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Modification du post {{ post.title }}{% endblock %}
+{% block title %}{% blocktrans trimmed with title=post.title %}Modification du post {{ title }}{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
 <div class="max-w-xl mx-auto px-4 py-10">
     <h1 class="text-xl font-semibold text-gray-900 mb-6">
-        Modifier le post
+        {% trans "Modifier le post" %}
         <span class="text-gray-500">{{ post.title }}</span>
     </h1>
 
@@ -18,52 +19,55 @@
         {% csrf_token %}
 
         <div>
-            <label for="title_post" class="block text-sm text-gray-700 mb-1">Titre du post*</label>
+            <label for="title_post" class="block text-sm text-gray-700 mb-1">{% trans "Titre du post*" %}</label>
             <input required type="text" name="title" id="title_post" value="{{ post.title }}"
                 class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">
         </div>
 
         <div>
-            <label for="description" class="block text-sm text-gray-700 mb-1">Description*</label>
+            <label for="description" class="block text-sm text-gray-700 mb-1">{% trans "Description*" %}</label>
             <textarea required name="description" id="description" rows="5"
-                class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">{{post.description }}</textarea>
+                class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">{{ post.description }}</textarea>
         </div>
 
         <div>
-            <label for="image" class="block text-sm text-gray-700 mb-1">Image</label>
+            <label for="image" class="block text-sm text-gray-700 mb-1">{% trans "Image" %}</label>
 
             {% if post.image %}
             <img src="{{ post.image.url }}" alt="{{ post.title }}"
                 class="mb-3 h-32 w-auto border border-gray-200 object-cover">
-            <p class="mb-2 text-xs text-gray-500">Laissez vide pour conserver l'image actuelle.</p>
+            <p class="mb-2 text-xs text-gray-500">{% trans "Laissez vide pour conserver l'image actuelle." %}</p>
             {% endif %}
 
             <input type="file" accept="image/*" name="image" id="image"
                 class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">
         </div>
 
-        <div class="flex flex-wrap gap-2">
-    {% for category in categories %}
-    <label class="cursor-pointer">
-        <input type="checkbox" name="categories" value="{{ category.id }}" class="peer sr-only"
-            {% if category.id in selected_ids %}checked{% endif %}>
-        <span class="inline-block border border-gray-300 px-3 py-1 text-sm bg-white
-             peer-checked:bg-gray-900 peer-checked:text-white peer-checked:border-gray-900
-             peer-focus-visible:ring-2 peer-focus-visible:ring-gray-400">
-            {{ category.name }}
-        </span>
-    </label>
-    {% empty %}
-    <p class="text-sm text-gray-500">Aucune catégorie</p>
-    {% endfor %}
-    </div>
+        <div>
+            <p class="text-sm text-gray-700 mb-2">{% trans "Catégories" %}</p>
+            <div class="flex flex-wrap gap-2">
+                {% for category in categories %}
+                <label class="cursor-pointer">
+                    <input type="checkbox" name="categories" value="{{ category.id }}" class="peer sr-only"
+                        {% if category.id in selected_ids %}checked{% endif %}>
+                    <span class="inline-block border border-gray-300 px-3 py-1 text-sm bg-white
+                         peer-checked:bg-gray-900 peer-checked:text-white peer-checked:border-gray-900
+                         peer-focus-visible:ring-2 peer-focus-visible:ring-gray-400">
+                        {{ category.name }}
+                    </span>
+                </label>
+                {% empty %}
+                <p class="text-sm text-gray-500">{% trans "Aucune catégorie" %}</p>
+                {% endfor %}
+            </div>
+        </div>
 
         <div class="flex gap-3">
             <a href="{% url 'post' pk=post.pk %}"
                 class="w-full border border-gray-300 px-4 py-2 text-sm text-gray-700 text-center hover:bg-gray-100 transition-colors">
-                Annuler
+                {% trans "Annuler" %}
             </a>
-            <input type="submit" value="Enregistrer"
+            <input type="submit" value="{% trans 'Enregistrer' %}"
                 class="w-full border border-gray-900 px-4 py-2 text-sm text-gray-900 hover:bg-gray-900 hover:text-white transition-colors cursor-pointer">
         </div>
     </form>

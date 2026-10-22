@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}Supprimer une catégorie{% endblock %}
+{% load static i18n %}
+
+{% block title %}{% trans "Supprimer une catégorie" %}{% endblock %}
 
 {% block content %}
 
 <div class="max-w-xl mx-auto px-4 py-10">
-    <h1 class="text-xl font-semibold text-gray-900 mb-6">Supprimer une catégorie</h1>
+    <h1 class="text-xl font-semibold text-gray-900 mb-6">{% trans "Supprimer une catégorie" %}</h1>
 
     <div class="mb-6">
-        <span class="block text-sm text-gray-700 mb-1">Nom de la catégorie</span>
+        <span class="block text-sm text-gray-700 mb-1">{% trans "Nom de la catégorie" %}</span>
         <p class="w-full border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900">
             {{ category.name }}
         </p>
@@ -19,16 +20,16 @@
 
         <a href="{% url 'category' pk=category.pk %}"
             class="w-full border border-gray-300 px-4 py-2 text-center text-sm text-gray-700 transition-colors hover:bg-gray-100">
-            Annuler
+            {% trans "Annuler" %}
         </a>
 
         <button type="submit"
             class="w-full border border-red-700 bg-red-700 px-4 py-2 text-sm text-white transition-colors hover:bg-red-800 cursor-pointer">
-            Supprimer
+            {% trans "Supprimer" %}
         </button>
     </form>
 </div>
 
-<script src="{% static '/js/delete_category.mjs' %}"></script>
+<script src="{% static 'js/delete_category.mjs' %}"></script>
 
 {% endblock %}

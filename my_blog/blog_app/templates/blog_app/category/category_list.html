@@ -1,35 +1,27 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Liste des catégories — MyBlog{% endblock %}
+{% block title %}{% trans "Liste des catégories — MyBlog" %}{% endblock %}
 
 {% block content %}
 
 <section class="mb-10">
-
-
   <div class="flex flex-wrap items-center justify-between gap-4">
     <div>
       <h1 class="text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
-        Nos catégories
+        {% trans "Nos catégories" %}
       </h1>
     </div>
     {% if perms.blog_app.add_category %}
     <a href="{% url 'category_create' %}"
       class="rounded-lg bg-gray-950 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800">
-      Créer une catégorie
+      {% trans "Créer une catégorie" %}
     </a>
     {% endif %}
   </div>
-
-
-
-
 </section>
 
-
 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-
   {% for category in object_list %}
   <article class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm
            transition-all duration-300 hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg">
@@ -45,8 +37,8 @@
 
       <div class="flex shrink-0 items-center gap-2">
         {% if perms.blog_app.change_category %}
-        <a href="{% url 'category_edit' pk=category.pk %}" title="Modifier la catégorie"
-          aria-label="Modifier la catégorie" class="inline-flex h-9 w-9 items-center justify-center rounded-xl
+        <a href="{% url 'category_edit' pk=category.pk %}" title="{% trans 'Modifier la catégorie' %}"
+          aria-label="{% trans 'Modifier la catégorie' %}" class="inline-flex h-9 w-9 items-center justify-center rounded-xl
                  border border-gray-200 bg-white text-gray-500
                  transition-all duration-200
                  hover:border-gray-950 hover:bg-gray-950 hover:text-white">
@@ -54,8 +46,8 @@
         </a>
         {% endif %}
         {% if perms.blog_app.delete_category %}
-        <a href="{% url 'category_delete' pk=category.pk %}" title="Supprimer la catégorie"
-          aria-label="Supprimer la catégorie"
+        <a href="{% url 'category_delete' pk=category.pk %}" title="{% trans 'Supprimer la catégorie' %}"
+          aria-label="{% trans 'Supprimer la catégorie' %}"
           class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-500 transition hover:border-red-500 hover:bg-red-500 hover:text-white">
           <i class="fa-solid fa-trash text-sm"></i>
         </a>
@@ -66,20 +58,14 @@
     <div class="absolute bottom-0 left-0 h-0.5 w-0 bg-gray-950 transition-all duration-300 group-hover:w-full"></div>
 
   </article>
-
   {% empty %}
 
   <div class="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
     <i class="fa-regular fa-folder-open mb-4 text-3xl text-gray-300"></i>
-    <h3 class="text-lg font-semibold text-gray-900">Aucun résultat</h3>
-    <p class="mt-2 text-sm text-gray-500">Il n'y a encore aucune catégorie sur le blog.</p>
-
+    <h3 class="text-lg font-semibold text-gray-900">{% trans "Aucun résultat" %}</h3>
+    <p class="mt-2 text-sm text-gray-500">{% trans "Il n'y a encore aucune catégorie sur le blog." %}</p>
   </div>
-
   {% endfor %}
-
 </div>
-
-</section>
 
 {% endblock %}

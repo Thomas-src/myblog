@@ -1,24 +1,24 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Connexion — MyBlog{% endblock %}
+{% block title %}{% trans "Connexion — MyBlog" %}{% endblock %}
 
 {% block content %}
 
 <div class="max-w-sm mx-auto py-10">
     <div class="mb-8">
         <h1 class="text-2xl font-bold tracking-tight text-gray-950">
-            Connexion
+            {% trans "Connexion" %}
         </h1>
         <p class="mt-2 text-sm text-gray-500">
-            Connectez-vous à votre compte.
+            {% trans "Connectez-vous à votre compte." %}
         </p>
     </div>
 
     {% if form.errors %}
     <div class="mb-6 border border-red-200 bg-red-50 px-4 py-3">
         <p class="text-sm text-red-600">
-            Votre nom d'utilisateur et mot de passe ne correspondent pas, veuillez réessayer.
+            {% trans "Votre nom d'utilisateur et mot de passe ne correspondent pas, veuillez réessayer." %}
         </p>
     </div>
     {% endif %}
@@ -28,12 +28,11 @@
 
         {% if user.is_authenticated %}
         <p class="text-sm text-gray-600">
-            Votre compte n'a pas accès à cette page.
-            Connectez-vous avec un compte autorisé pour continuer.
+            {% trans "Votre compte n'a pas accès à cette page. Connectez-vous avec un compte autorisé pour continuer." %}
         </p>
         {% else %}
         <p class="text-sm text-gray-600">
-            Veuillez vous connecter pour accéder à cette page.
+            {% trans "Veuillez vous connecter pour accéder à cette page." %}
         </p>
         {% endif %}
 
@@ -44,7 +43,7 @@
         {% csrf_token %}
 
         <div>
-            <label class="block mb-1 text-sm text-gray-700">
+            <label for="{{ form.username.id_for_label }}" class="block mb-1 text-sm text-gray-700">
                 {{ form.username.label }}
             </label>
 
@@ -52,7 +51,7 @@
         </div>
 
         <div>
-            <label class="block mb-1 text-sm text-gray-700">
+            <label for="{{ form.password.id_for_label }}" class="block mb-1 text-sm text-gray-700">
                 {{ form.password.label }}
             </label>
 
@@ -61,7 +60,7 @@
 
         <input
             type="submit"
-            value="Se connecter"
+            value="{% trans 'Se connecter' %}"
             class="w-full border border-gray-900 px-4 py-2 text-sm text-gray-900 hover:bg-gray-900 hover:text-white transition-colors cursor-pointer"
         >
 
@@ -73,7 +72,7 @@
             href="{% url 'signup' %}"
             class="block w-full border border-gray-300 px-4 py-2 text-sm text-gray-700 text-center hover:bg-gray-100 transition-colors"
         >
-            Inscription
+            {% trans "Inscription" %}
         </a>
     </div>
 

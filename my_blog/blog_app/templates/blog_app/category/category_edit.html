@@ -1,22 +1,21 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}
-Modification de la catégorie {{ category.name }}
-{% endblock %}
+{% block title %}{% blocktrans trimmed with name=category.name %}Modification de la catégorie {{ name }}{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
 <div class="max-w-xl mx-auto px-4 py-10">
 
     <h1 class="text-xl font-semibold text-gray-900 mb-6">
-        Modifier la catégorie
+        {% trans "Modifier la catégorie" %}
         <span class="text-gray-500">{{ category.name }}</span>
     </h1>
 
     <form method="post" action="{% url 'category_edit' pk=category.pk %}" class="space-y-5">
         {% csrf_token %}
 
-        {% include "blog_app/snippets/form_snippet.html" with action_text="Modifier" %}
+        {% include "blog_app/snippets/form_snippet.html" with action_text=_("Modifier") %}
 
     </form>
 

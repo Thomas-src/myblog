@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Accueil — MyBlog{% endblock %}
+{% block title %}{% trans "Accueil — MyBlog" %}{% endblock %}
 
 
 {% block content %}
@@ -10,12 +11,11 @@
   <div class="max-w-2xl">
 
     <h1 class="mt-5 text-4xl font-bold tracking-tight text-gray-950 sm:text-5xl">
-      MyBlog, votres espace de blog
+      {% trans "MyBlog, votre espace de blog" %}
     </h1>
 
     <p class="mt-5 text-lg leading-8 text-gray-500">
-      Bienvenue sur MyBlog.
-      Découvrez les dernières publications de notre communauté.
+      {% trans "Bienvenue sur MyBlog. Découvrez les dernières publications de notre communauté." %}
     </p>
 
   </div>
@@ -28,10 +28,10 @@
 
     <div>
 
-      <h2 class="text-2xl font-semibold tracking-tight text-gray-950">Dernier post</h2>
+      <h2 class="text-2xl font-semibold tracking-tight text-gray-950">{% trans "Dernier post" %}</h2>
 
       <p class="mt-1 text-sm text-gray-500">
-        La dernière publication du blog.
+        {% trans "La dernière publication du blog." %}
       </p>
 
     </div>
@@ -39,7 +39,7 @@
 
     <a href="{% url 'post_list' %}"
       class="hidden text-sm font-medium text-gray-600 transition hover:text-gray-950 sm:block">
-      Voir tous les posts
+      {% trans "Voir tous les posts" %}
       <span aria-hidden="true">→</span>
     </a>
 
@@ -68,7 +68,7 @@
             <i class="fa-regular fa-image mb-3 text-3xl"></i>
 
             <p class="text-sm">
-              Aucune image
+              {% trans "Aucune image" %}
             </p>
 
           </div>
@@ -83,7 +83,9 @@
 
         <div class="mb-4 flex flex-wrap items-center gap-3">
 
-          <span class="text-xs text-gray-400">Publié le {{ latest_post.createAt|date:"d/m/Y" }}</span>
+          <span class="text-xs text-gray-400">
+            {% blocktrans trimmed with date=latest_post.createAt|date:"d/m/Y" %}Publié le {{ date }}{% endblocktrans %}
+          </span>
 
         </div>
         <h3 class="text-2xl font-semibold tracking-tight text-gray-950">
@@ -93,7 +95,7 @@
         <div class="mt-8">
 
           <a href="{% url 'post' pk=latest_post.pk %}" class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
-            Lire l'article
+            {% trans "Lire l'article" %}
             <i class="fa-solid fa-arrow-right text-xs"></i>
           </a>
         </div>
@@ -108,11 +110,11 @@
     <i class="fa-regular fa-file-lines mb-4 text-3xl text-gray-300"></i>
 
     <h3 class="text-lg font-semibold text-gray-900">
-      Aucun post
+      {% trans "Aucun post" %}
     </h3>
 
     <p class="mt-2 text-sm text-gray-500">
-      Il n'y a encore aucune publication sur le blog.
+      {% trans "Il n'y a encore aucune publication sur le blog." %}
     </p>
 
   </div>

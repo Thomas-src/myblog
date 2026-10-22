@@ -1,7 +1,9 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ LANGUAGE_CODE }}">
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -28,30 +30,43 @@
         <a href="{% url 'index' %}" class="text-base font-semibold tracking-tight text-gray-950">
           MyBlog
         </a>
-        <div class="flex gap-6 text-sm font-medium text-gray-500">
-          <li><a href="{% url 'index' %}" class="hover:text-gray-950 transition-colors">Accueil</a></li>
-          <li><a href="{% url 'post_list' %}" class="hover:text-gray-950 transition-colors">Posts</a></li>
-          <li><a href="{% url 'category_list' %}" class="hover:text-gray-950 transition-colors">Catégories</a></li>
+        <div class="flex items-center gap-6 text-sm font-medium text-gray-500">
+          <li><a href="{% url 'index' %}" class="hover:text-gray-950 transition-colors">{% trans "Accueil" %}</a></li>
+          <li><a href="{% url 'post_list' %}" class="hover:text-gray-950 transition-colors">{% trans "Posts" %}</a></li>
+          <li><a href="{% url 'category_list' %}" class="hover:text-gray-950 transition-colors">{% trans "Catégories" %}</a></li>
           {% if user.is_authenticated %}
-          <li><a href="{% url 'profile' %}" class="hover:text-gray-950 transition-colors">Profil</a></li>
-          <li><a href="{% url 'edit_profile' %}" class="hover:text-gray-950 transition-colors">Modifier mon profil</a></li>
+          <li><a href="{% url 'profile' %}" class="hover:text-gray-950 transition-colors">{% trans "Profil" %}</a></li>
+          <li><a href="{% url 'edit_profile' %}" class="hover:text-gray-950 transition-colors">{% trans "Modifier mon profil" %}</a></li>
           <li class="nav-item">
             <form method="post" action="{% url 'logout' %}" class="space-y-5">
               {% csrf_token %}
-              <input type="submit" value="Déconnexion" class="hover:text-gray-950 transition-colors cursor-pointer">
+              <input type="submit" value="{% trans 'Déconnexion' %}" class="hover:text-gray-950 transition-colors cursor-pointer">
             </form>
           </li>
-          {% endif %}
-          {% if not user.is_authenticated %}
-
+          {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Connexion</a>
+            <a class="nav-link" href="{% url 'login' %}">{% trans "Connexion" %}</a>
           </li>
           {% endif %}
-      </div>
+
+          <!-- Sélecteur de langue -->
+          <li>
+            <form action="{% url 'set_language' %}" method="post">
+              {% csrf_token %}
+              <input name="next" type="hidden" value="{{ request.get_full_path }}">
+              <select name="language" onchange="this.form.submit()"
+                class="border border-gray-200 rounded px-2 py-1 text-sm bg-white cursor-pointer"
+                aria-label="{% trans 'Langue' %}">
+                {% for code, nom in LANGUAGES %}
+                <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>
+                  {{ code|upper }}
+                </option>
+                {% endfor %}
+              </select>
+            </form>
+          </li>
+        </div>
       </ul>
-
-
     </nav>
   </header>
 
@@ -82,7 +97,7 @@
           </span>
 
           <button type="button" onclick="this.parentElement.remove()"
-            class="ml-4 text-lg leading-none opacity-50 transition hover:opacity-100" aria-label="Fermer">
+            class="ml-4 text-lg leading-none opacity-50 transition hover:opacity-100" aria-label="{% trans 'Fermer' %}">
             &times;
           </button>
 
@@ -107,17 +122,17 @@
 
           <a href="?page={{ page_obj.previous_page_number }}"
             class="text-blue-600 font-bold underline hover:text-blue-800">
-            Avant
+            {% trans "Avant" %}
           </a>
           {% endif %}
 
           <span class="font-bold text-gray-700">
-            Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
+            {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} sur {{ total }}.{% endblocktrans %}
           </span>
 
           {% if page_obj.has_next %}
           <a href="?page={{ page_obj.next_page_number }}" class="text-blue-600 font-bold underline hover:text-blue-800">
-            Suivant
+            {% trans "Suivant" %}
           </a>
 
           <a href="?page={{ page_obj.paginator.num_pages }}"

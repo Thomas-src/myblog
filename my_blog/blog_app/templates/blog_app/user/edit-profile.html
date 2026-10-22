@@ -1,24 +1,24 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Modifier votre profil — MyBlog{% endblock %}
+{% block title %}{% trans "Modifier votre profil — MyBlog" %}{% endblock %}
 
 {% block content %}
 
 <div class="max-w-sm mx-auto py-10">
 
     <div class="mb-8">
-        <h1 class="text-2xl font-bold tracking-tight text-gray-950">Modifier votre profil</h1>
+        <h1 class="text-2xl font-bold tracking-tight text-gray-950">{% trans "Modifier votre profil" %}</h1>
 
         <p class="mt-2 text-sm text-gray-500">
-            Modifiez les informations de votre profil.
+            {% trans "Modifiez les informations de votre profil." %}
         </p>
     </div>
 
     {% if form.errors %}
     <div class="mb-6 border border-red-200 bg-red-50 px-4 py-3">
         <p class="text-sm text-red-600">
-            Veuillez corriger les erreurs ci-dessous.
+            {% trans "Veuillez corriger les erreurs ci-dessous." %}
         </p>
     </div>
     {% endif %}
@@ -33,9 +33,10 @@
             </p>
         </div>
         {% endif %}
+
         <div>
-            <label for="username" class="block mb-1 text-sm text-gray-700">
-                E-mail
+            <label for="email" class="block mb-1 text-sm text-gray-700">
+                {% trans "E-mail" %}
             </label>
 
             <input type="text" name="email" id="email" autocomplete="email" disabled class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900
@@ -46,7 +47,7 @@
 
         <div>
             <label for="username" class="block mb-1 text-sm text-gray-700">
-                Nom d'utilisateur
+                {% trans "Nom d'utilisateur" %}
             </label>
 
             <input type="text" name="username" id="username" autocomplete="username" required
@@ -55,39 +56,40 @@
         </div>
 
         <div>
-            <label for="username" class="block mb-1 text-sm text-gray-700">
-                Mot de passe actuel
+            <label for="old_password" class="block mb-1 text-sm text-gray-700">
+                {% trans "Mot de passe actuel" %}
             </label>
 
-            <input type="text" name="username" id="username" autocomplete="username" required
+            <input type="password" name="old_password" id="old_password" autocomplete="current-password" required
                 class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
         </div>
 
         <div>
-            <label for="password" class="block mb-1 text-sm text-gray-700">
-                Nouveau mot de passe
+            <label for="new_password1" class="block mb-1 text-sm text-gray-700">
+                {% trans "Nouveau mot de passe" %}
             </label>
 
-            <input type="password" name="password" id="password" autocomplete="new-password" required
+            <input type="password" name="new_password1" id="new_password1" autocomplete="new-password" required
                 class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
         </div>
 
         <div>
-            <label for="password" class="block mb-1 text-sm text-gray-700">
-                Confirmation du nouveau mot de passe
+            <label for="new_password2" class="block mb-1 text-sm text-gray-700">
+                {% trans "Confirmation du nouveau mot de passe" %}
             </label>
 
-            <input type="password" name="password" id="password" autocomplete="new-password" required
+            <input type="password" name="new_password2" id="new_password2" autocomplete="new-password" required
                 class="w-full border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
         </div>
-        <input type="submit" value="Modifier votre profil"
+
+        <input type="submit" value="{% trans 'Modifier votre profil' %}"
             class="w-full border border-gray-900 px-4 py-2 text-sm text-gray-900 hover:bg-gray-900 hover:text-white transition-colors cursor-pointer">
     </form>
 
     <div class="mt-4">
-        <a href="{% url 'login' %}"
+        <a href="{% url 'index' %}"
             class="block w-full border border-gray-300 px-4 py-2 text-sm text-gray-700 text-center hover:bg-gray-100 transition-colors">
-            Déjà un compte ? Se connecter
+            {% trans "Annuler" %}
         </a>
     </div>
 

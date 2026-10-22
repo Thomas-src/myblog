@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}{{ post.title }} — MyBlog{% endblock %}
 
@@ -10,7 +10,7 @@
     <a href="{% url 'post_list' %}"
       class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-gray-950">
       <i class="fa-solid fa-arrow-left text-xs"></i>
-      Retour aux posts
+      {% trans "Retour aux posts" %}
     </a>
   </div>
 
@@ -21,14 +21,16 @@
         class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 transition hover:bg-gray-200">
         {{ category.name }}
       </a>
-
       {% endfor %}
 
       <span class="text-xs text-gray-400">
-        Publié le {{ post.createAt|date:"d F Y" }} - Par 
-      <a href="{% url 'user' id=post.creator.id %}" class="text-xs font-medium">
-        {{ post.creator.username }}
-      </a>
+        {% url 'user' id=post.creator.id as creator_url %}
+        {% blocktrans trimmed with date=post.createAt|date:"d F Y" %}
+          Publié le {{ date }} - Par
+        {% endblocktrans %}
+        <a href="{{ creator_url }}" class="text-xs font-medium">
+          {{ post.creator.username }}
+        </a>
       </span>
 
     </div>

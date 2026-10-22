@@ -3,10 +3,11 @@ from django.urls import reverse
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 from .models import Category, Post
+from modeltranslation.admin import TranslationAdmin
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(TranslationAdmin):
     list_display = ["name", "view_posts_link"]
     ordering = ["name"]
     readonly_fields = ["posts_list"]
@@ -48,7 +49,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(TranslationAdmin):
     list_display = [
         "title_with_image",
         "description",

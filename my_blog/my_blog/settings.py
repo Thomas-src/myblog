@@ -30,7 +30,6 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-gettext = lambda s: s
 INSTALLED_APPS = [
     'modeltranslation',
     'django.contrib.admin',
@@ -41,20 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog_app',
 ]
-LANGUAGE_CODE = 'fr'
-USE_I18N = True
 
-LANGUAGES = (
-    ('fr', gettext('French')),
-    ('en', gettext('English')),
-)
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'fr'
-MODELTRANSLATION_LANGUAGES = ('fr', 'en')
-MODELTRANSLATION_FALLBACK_LANGUAGES = ('fr', 'en')
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -120,9 +111,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
-
+from django.utils.translation import gettext_lazy as gettext
 LANGUAGE_CODE = 'fr-ca'
+USE_I18N = True
 
+LANGUAGES = (
+    ('fr', gettext('French')),
+    ('en', gettext('English')),
+)
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'fr'
+MODELTRANSLATION_LANGUAGES = ('fr', 'en')
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('fr', 'en')
+
+LOCALE_PATHS = [BASE_DIR / 'locale']
 TIME_ZONE = 'America/Montreal'
 
 USE_I18N = True

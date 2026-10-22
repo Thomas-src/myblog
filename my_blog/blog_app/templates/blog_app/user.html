@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Profil de {{ user.username }} — MyBlog{% endblock %}
+{% block title %}{% blocktrans trimmed with username=user.username %}Profil de {{ username }} — MyBlog{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
 <section class="mb-14">
-
 
     <div class="flex items-center gap-4">
 
@@ -22,14 +21,14 @@
     </div>
 
     <span class="text-xs text-gray-400">
-        Membre depuis le {{ user.date_joined|date:"d F Y" }}
+        {% blocktrans trimmed with date=user.date_joined|date:"d F Y" %}Membre depuis le {{ date }}{% endblocktrans %}
     </span>
 
 </section>
 
 <section>
 
-    <h2 class="mb-6 text-xl font-semibold tracking-tight text-gray-950">Publications</h2>
+    <h2 class="mb-6 text-xl font-semibold tracking-tight text-gray-950">{% trans "Publications" %}</h2>
 
     <div class="grid gap-6 sm:grid-cols-2">
 
@@ -64,18 +63,16 @@
                 </div>
             </a>
         </article>
-         {% empty %}
-    <div class="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
-        <i class="fa-regular fa-file-lines mb-4 text-3xl text-gray-300"></i>
+        {% empty %}
+        <div class="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
+            <i class="fa-regular fa-file-lines mb-4 text-3xl text-gray-300"></i>
 
-        <h3 class="text-lg font-semibold text-gray-900">Aucune publication</h3>
+            <h3 class="text-lg font-semibold text-gray-900">{% trans "Aucune publication" %}</h3>
+        </div>
+
+        {% endfor %}
+
     </div>
-
-    {% endfor %}
-
-    </div>
-
-   
 
 </section>
 

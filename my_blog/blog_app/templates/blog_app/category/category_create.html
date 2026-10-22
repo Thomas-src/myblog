@@ -1,17 +1,22 @@
 {% extends 'base.html' %}
-{% block title %}Créer une catégorie{% endblock %}
+{% load static i18n %}
 
+{% block title %}{% trans "Créer une catégorie" %}{% endblock %}
 {% block content %}
-{% load static %}
 
 <div class="max-w-xl mx-auto px-4 py-10">
-    <h1 class="text-xl font-semibold text-gray-900 mb-6">Créer une catégorie</h1>
+    <h1 class="text-xl font-semibold text-gray-900 mb-6">{% trans "Créer une catégorie" %}</h1>
 
-    <form method="post" action="{% url 'category_create' %}" enctype="multipart/form-data" class="space-y-5" >
+    <form method="post" action="{% url 'category_create' %}" enctype="multipart/form-data" class="space-y-5">
         {% csrf_token %}
 
-         {{ form }}
-        </form>
+        {{ form }}
+
+        <button type="submit"
+            class="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 transition-colors">
+            {% trans "Créer" %}
+        </button>
+    </form>
 </div>
 
 {% endblock %}

@@ -1,14 +1,13 @@
-
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Créer un post{% endblock %}
+{% block title %}{% trans "Créer un post" %}{% endblock %}
 
 {% block content %}
 
 <div class="max-w-xl mx-auto px-4 py-10">
     <h2 class="text-xl font-semibold text-gray-900 mb-6">
-        Créer votre post
+        {% trans "Créer votre post" %}
     </h2>
 
     <form method="post"
@@ -27,7 +26,7 @@
         <div>
             <label for="id_title"
                    class="block text-sm text-gray-700 mb-1">
-                Titre du post*
+                {% trans "Titre du post*" %}
             </label>
 
             <input required
@@ -46,13 +45,13 @@
         <div>
             <label for="id_description"
                    class="block text-sm text-gray-700 mb-1">
-                Description*
+                {% trans "Description*" %}
             </label>
 
             <textarea required
                       name="description"
                       id="id_description"
-                      placeholder="Description"
+                      placeholder="{% trans 'Description' %}"
                       rows="5"
                       maxlength="500"
                       class="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-gray-500">{{ form.description.value|default_if_none:'' }}</textarea>
@@ -65,7 +64,7 @@
         <div>
             <label for="id_image"
                    class="block text-sm text-gray-700 mb-1">
-                Image
+                {% trans "Image" %}
             </label>
 
             <input type="file"
@@ -80,7 +79,7 @@
         </div>
 
         <div>
-            <p class="text-sm text-gray-700 mb-2">Catégories</p>
+            <p class="text-sm text-gray-700 mb-2">{% trans "Catégories" %}</p>
 
             <div class="flex flex-wrap gap-2">
                 {% for category in categories %}
@@ -98,7 +97,7 @@
                         </span>
                     </label>
                 {% empty %}
-                    <p class="text-sm text-gray-500">Aucune catégorie</p>
+                    <p class="text-sm text-gray-500">{% trans "Aucune catégorie" %}</p>
                 {% endfor %}
             </div>
 
@@ -109,7 +108,7 @@
 
         <button type="submit"
                 class="w-full border border-gray-900 px-4 py-2 text-sm text-gray-900 hover:bg-gray-900 hover:text-white transition-colors cursor-pointer">
-            {{ action_text | default:"Créer le post" }}
+            {{ action_text|default:_("Créer le post") }}
         </button>
     </form>
 </div>

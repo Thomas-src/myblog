@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Profil de {{ category.name }} — MyBlog{% endblock %}
+{% block title %}{% blocktrans trimmed with name=category.name %}Profil de {{ name }} — MyBlog{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
 <section class="mb-14">
     <div class="flex items-center gap-4">
-        <h1 class="text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">Post(s) de la catégorie {{ category.name}}</h1>
+        <h1 class="text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl">
+            {% blocktrans trimmed with name=category.name %}Post(s) de la catégorie {{ name }}{% endblocktrans %}
+        </h1>
     </div>
 </section>
 
 <section>
 
     <div class="grid gap-6 sm:grid-cols-2">
-
-        {% for post in posts  %}
-
+        {% for post in posts %}
         <article
             class="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:shadow-md">
             <a href="{% url 'post' pk=post.pk %}" class="flex flex-col">
@@ -29,12 +29,13 @@
                         <i class="fa-regular fa-image text-2xl"></i>
                     </div>
                     {% endif %}
-
                 </div>
 
                 <div class="p-6">
 
-                    <span class="text-xs text-gray-400">Publié le {{ post.createAt|date:"d F Y" }}</span>
+                    <span class="text-xs text-gray-400">
+                        {% blocktrans trimmed with date=post.createAt|date:"d F Y" %}Publié le {{ date }}{% endblocktrans %}
+                    </span>
 
                     <h2
                         class="mt-2 text-lg font-semibold tracking-tight text-gray-950 transition group-hover:text-gray-600">
@@ -47,9 +48,9 @@
         <div class="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
             <i class="fa-regular fa-file-lines mb-4 text-3xl text-gray-300"></i>
 
-            <h3 class="text-lg font-semibold text-gray-900">Aucune publication</h3>
+            <h3 class="text-lg font-semibold text-gray-900">{% trans "Aucune publication" %}</h3>
         </div>
-
+        
         {% endfor %}
 
     </div>
