@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html, format_html_join
-
+from django.utils.safestring import mark_safe
 from .models import Category, Post
 
 
@@ -20,7 +20,7 @@ class CategoryAdmin(admin.ModelAdmin):
         posts = obj.posts.all()
         if posts:
             post_links = format_html_join(
-                format_html("<br>"),
+                mark_safe("<br>"),
                 '<a href="{}">{}</a>',
                 (
                     (reverse("admin:blog_app_post_change", args=[p.pk]), p.title)

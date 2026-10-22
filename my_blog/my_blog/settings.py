@@ -30,7 +30,9 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+gettext = lambda s: s
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +41,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog_app',
 ]
+LANGUAGE_CODE = 'fr'
+USE_I18N = True
+
+LANGUAGES = (
+    ('fr', gettext('French')),
+    ('en', gettext('English')),
+)
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'fr'
+MODELTRANSLATION_LANGUAGES = ('fr', 'en')
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('fr', 'en')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
