@@ -56,15 +56,19 @@ class UserProfileView(View):
 class EditUserProfileView(LoginRequiredMixin, View):
     template_name = "blog_app/user/edit-profile.html"
 
+    def get_user(self, request):
+        return User.objects.get(pk=request.user.pk)
+
     def get(self, request):
-        form = EditUserProfileForm(instance=request.user)
+        form = EditUserProfileForm(instance=self.get_user(request))
         return render(request, self.template_name, {"form": form})
 
     def post(self, request):
-        form = EditUserProfileForm(request.POST, instance=request.user)
+        form = EditUserProfileForm(request.POST, instance=self.get_user(request))
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)
+            if form.cleaned_data.get("new_password1"):
+                update_session_auth_hash(request, user)
             messages.success(request, _("Votre profil a été mis à jour."))
             return redirect("profile")
         return render(request, self.template_name, {"form": form})

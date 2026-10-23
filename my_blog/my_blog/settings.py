@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
 from django.utils.translation import gettext_lazy as gettext
-LANGUAGE_CODE = 'fr-ca'
+LANGUAGE_CODE = 'fr'
 USE_I18N = True
 
 LANGUAGES = (
@@ -129,6 +129,8 @@ TIME_ZONE = 'America/Montreal'
 USE_I18N = True
 
 USE_TZ = True
+
+DEEPL_API_KEY = "f80eba2c-962b-4389-bf21-fc8be5fb59c8:fx"
 
 
 # Static files (CSS, JavaScript, Images)

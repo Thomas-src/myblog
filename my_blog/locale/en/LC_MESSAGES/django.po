@@ -1,13 +1,14 @@
 # English translation for MyBlog.
+# Copyright (C) 2026 MyBlog
 # This file is distributed under the same license as the MyBlog package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: MyBlog 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 17:36-0400\n"
-"PO-Revision-Date: 2026-10-22 18:00-0400\n"
-"Last-Translator: Thomas Derdeyn\n"
+"POT-Creation-Date: 2026-10-23 16:14-0400\n"
+"PO-Revision-Date: 2026-10-23 16:30-0400\n"
+"Last-Translator: \n"
 "Language-Team: English\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -15,10 +16,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: .\blog_app\admin.py:32
+msgid "Aucune publication associée"
+msgstr "No associated posts"
+
+#: .\blog_app\admin.py:36
+msgid "Ajouter une publication"
+msgstr "Add a post"
+
+#: .\blog_app\admin.py:40 .\blog_app\templates\blog_app\user.html:31
+#: .\blog_app\templates\blog_app\user\profile.html:26
+msgid "Publications"
+msgstr "Posts"
+
+#: .\blog_app\admin.py:46
+msgid "Voir les publications"
+msgstr "View posts"
+
+#: .\blog_app\forms.py:59
+msgid "Mot de passe actuel"
+msgstr "Current password"
+
+#: .\blog_app\forms.py:63
+msgid "Nouveau mot de passe"
+msgstr "New password"
+
+#: .\blog_app\forms.py:68
+msgid "Confirmation du nouveau mot de passe"
+msgstr "New password confirmation"
+
+#: .\blog_app\forms.py:76 .\blog_app\templates\registration\signup.html:42
+msgid "Nom d'utilisateur"
+msgstr "Username"
+
+#: .\blog_app\forms.py:84
+msgid "Le mot de passe actuel est incorrect."
+msgstr "The current password is incorrect."
+
+#: .\blog_app\forms.py:94
+msgid "Les deux mots de passe ne correspondent pas."
+msgstr "The two passwords do not match."
+
 #: .\blog_app\templates\blog_app\category\category.html:4
 #, python-format
 msgid "Profil de %(name)s — MyBlog"
-msgstr "Category %(name)s — MyBlog"
+msgstr "%(name)s's profile — MyBlog"
 
 #: .\blog_app\templates\blog_app\category\category.html:11
 #, python-format
@@ -45,10 +87,6 @@ msgstr "No posts"
 msgid "Créer une catégorie"
 msgstr "Create a category"
 
-#: .\blog_app\templates\blog_app\category\category_create.html:17
-msgid "Créer"
-msgstr "Create"
-
 #: .\blog_app\templates\blog_app\category\category_delete.html:4
 #: .\blog_app\templates\blog_app\category\category_delete.html:9
 msgid "Supprimer une catégorie"
@@ -61,6 +99,7 @@ msgstr "Category name"
 #: .\blog_app\templates\blog_app\category\category_delete.html:23
 #: .\blog_app\templates\blog_app\post\post_delete.html:60
 #: .\blog_app\templates\blog_app\post\post_edit.html:68
+#: .\blog_app\templates\blog_app\user\edit-profile.html:71
 msgid "Annuler"
 msgstr "Cancel"
 
@@ -127,7 +166,7 @@ msgstr "Latest post"
 
 #: .\blog_app\templates\blog_app\index.html:34
 msgid "La dernière publication du blog."
-msgstr "The latest post on the blog."
+msgstr "The blog's most recent post."
 
 #: .\blog_app\templates\blog_app\index.html:42
 msgid "Voir tous les posts"
@@ -226,7 +265,7 @@ msgstr ""
 
 #: .\blog_app\templates\blog_app\post\post_delete.html:55
 msgid "Voulez-vous vraiment supprimer ce post ?"
-msgstr "Are you sure you want to delete this post?"
+msgstr "Do you really want to delete this post?"
 
 #: .\blog_app\templates\blog_app\post\post_edit.html:4
 #, python-format
@@ -244,6 +283,7 @@ msgid "Laissez vide pour conserver l'image actuelle."
 msgstr "Leave empty to keep the current image."
 
 #: .\blog_app\templates\blog_app\post\post_edit.html:70
+#: .\blog_app\templates\blog_app\snippets\form_snippet.html:35
 msgid "Enregistrer"
 msgstr "Save"
 
@@ -281,17 +321,12 @@ msgstr "%(username)s's profile — MyBlog"
 msgid "Membre depuis le %(date)s"
 msgstr "Member since %(date)s"
 
-#: .\blog_app\templates\blog_app\user.html:31
-#: .\blog_app\templates\blog_app\user\profile.html:26
-msgid "Publications"
-msgstr "Posts"
-
 #: .\blog_app\templates\blog_app\user\edit-profile.html:4
 msgid "Modifier votre profil — MyBlog"
 msgstr "Edit your profile — MyBlog"
 
 #: .\blog_app\templates\blog_app\user\edit-profile.html:11
-#: .\blog_app\templates\blog_app\user\edit-profile.html:85
+#: .\blog_app\templates\blog_app\user\edit-profile.html:64
 msgid "Modifier votre profil"
 msgstr "Edit your profile"
 
@@ -304,31 +339,17 @@ msgstr "Update your profile information."
 msgid "Veuillez corriger les erreurs ci-dessous."
 msgstr "Please correct the errors below."
 
-#: .\blog_app\templates\blog_app\user\edit-profile.html:39
+#: .\blog_app\templates\blog_app\user\edit-profile.html:31
 msgid "E-mail"
 msgstr "Email"
 
-#: .\blog_app\templates\blog_app\user\edit-profile.html:50
-#: .\blog_app\templates\registration\signup.html:42
-msgid "Nom d'utilisateur"
-msgstr "Username"
+#: .\blog_app\templates\blog_app\user\edit-profile.html:40
+msgid "Changer de mot de passe"
+msgstr "Change password"
 
-#: .\blog_app\templates\blog_app\user\edit-profile.html:60
-msgid "Mot de passe actuel"
-msgstr "Current password"
-
-#: .\blog_app\templates\blog_app\user\edit-profile.html:69
-msgid "Nouveau mot de passe"
-msgstr "New password"
-
-#: .\blog_app\templates\blog_app\user\edit-profile.html:78
-msgid "Confirmation du nouveau mot de passe"
-msgstr "Confirm new password"
-
-#: .\blog_app\templates\blog_app\user\edit-profile.html:92
-#: .\blog_app\templates\registration\signup.html:82
-msgid "Déjà un compte ? Se connecter"
-msgstr "Already have an account? Log in"
+#: .\blog_app\templates\blog_app\user\edit-profile.html:42
+msgid "Laissez ces champs vides pour conserver votre mot de passe actuel."
+msgstr "Leave these fields empty to keep your current password."
 
 #: .\blog_app\templates\blog_app\user\profile.html:4
 msgid "Votre profil sur MyBlog"
@@ -340,11 +361,11 @@ msgstr "All your posts"
 
 #: .\blog_app\templates\registration\login.html:4
 msgid "Connexion — MyBlog"
-msgstr "Log in — MyBlog"
+msgstr "Login — MyBlog"
 
 #: .\blog_app\templates\registration\login.html:11 .\templates\base.html:48
 msgid "Connexion"
-msgstr "Log in"
+msgstr "Login"
 
 #: .\blog_app\templates\registration\login.html:14
 msgid "Connectez-vous à votre compte."
@@ -355,15 +376,15 @@ msgid ""
 "Votre nom d'utilisateur et mot de passe ne correspondent pas, veuillez "
 "réessayer."
 msgstr ""
-"Your username and password didn't match. Please try again."
+"Your username and password do not match. Please try again."
 
 #: .\blog_app\templates\registration\login.html:31
 msgid ""
 "Votre compte n'a pas accès à cette page. Connectez-vous avec un compte "
 "autorisé pour continuer."
 msgstr ""
-"Your account doesn't have access to this page. Please log in with an "
-"authorized account to continue."
+"Your account doesn't have access to this page. Log in with an authorized "
+"account to continue."
 
 #: .\blog_app\templates\registration\login.html:35
 msgid "Veuillez vous connecter pour accéder à cette page."
@@ -393,6 +414,14 @@ msgstr "Password"
 #: .\blog_app\templates\registration\signup.html:75
 msgid "S'inscrire"
 msgstr "Sign up"
+
+#: .\blog_app\templates\registration\signup.html:82
+msgid "Déjà un compte ? Se connecter"
+msgstr "Already have an account? Log in"
+
+#: .\blog_app\views\user_views.py:72
+msgid "Votre profil a été mis à jour."
+msgstr "Your profile has been updated."
 
 #: .\my_blog\settings.py:119
 msgid "French"

@@ -1,36 +1,55 @@
 import logging
-from deep_translator import GoogleTranslator
+import deepl
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
+
+CODES_CIBLE = {"fr": "FR", "en": "EN-US"}
+
 
 def traduire(texte, source, cible):
     if not texte:
         return ""
     try:
-        return GoogleTranslator(source=source, target=cible).translate(texte) or ""
-    except Exception as e:
-        print(f"[TRADUCTION ÉCHOUÉE] {type(e).__name__}: {e}")
+        translator = deepl.Translator(settings.DEEPL_API_KEY)
+        resultat = translator.translate_text(texte,source_lang=source.upper(),target_lang=CODES_CIBLE[cible])
+        return resultat.text or ""
+    except Exception:
+        logger.exception("Traduction échouée (%s -> %s)", source, cible)
         return ""
 
 # Fonction pour traduire automatiquement les champs spécifiés d'une instance de modèle (généré par ia: ChatGPT)
 def auto_traduire(sender, instance, champs):
-  # Ancienne version en base (None si c'est une création)
-  ancien = None
-  if instance.pk:
-    ancien = sender.objects.filter(pk=instance.pk).first()
+    ancien = sender.objects.filter(pk=instance.pk).first() if instance.pk else None
 
-  for champ in champs:
-    fr = getattr(instance, f"{champ}_fr", None)
-    en = getattr(instance, f"{champ}_en", None)
-    fr_avant = getattr(ancien, f"{champ}_fr", None) if ancien else None
-    en_avant = getattr(ancien, f"{champ}_en", None) if ancien else None
+    for champ in champs:
+        valeurs = {}
+        modifies = []
 
-    fr_modifie = fr != fr_avant
-    en_modifie = en != en_avant
+        for lang in ("fr", "en"):
+            nom = f"{champ}_{lang}"
+            actuel = getattr(instance, nom, None) or ""
+            avant = (getattr(ancien, nom, None) or "") if ancien else ""
+            valeurs[lang] = actuel
+            if actuel != avant:
+                modifies.append(lang)
 
-    if fr and (not en or (fr_modifie and not en_modifie)):
-      # FR nouveau ou modifié, EN vide ou pas touché : FR -> EN
-      setattr(instance, f"{champ}_en", traduire(fr, "fr", "en"))
-    elif en and not fr:
-      # EN seulement : EN -> FR
-      setattr(instance, f"{champ}_fr", traduire(en, "en", "fr"))
+        if len(modifies) == 1:
+            # Une seule langue modifiée (ou créée) : c'est la source
+            source = modifies[0]
+        elif not modifies:
+            # Rien de modifié : on ne comble que une version manquante
+            source = "fr" if valeurs["fr"] else "en"
+            cible = "en" if source == "fr" else "fr"
+            if not valeurs[source] or valeurs[cible]:
+                continue
+        else:
+            # Les deux langues modifiées à la main : on respecte la saisie
+            continue
+
+        cible = "en" if source == "fr" else "fr"
+        resultat = traduire(valeurs[source], source, cible)
+
+        # On n'écrase la version existante que si la traduction a réussi
+        if resultat:
+            setattr(instance, f"{champ}_{cible}", resultat)
